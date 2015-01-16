@@ -4,13 +4,12 @@ module Lightblue
 
     attr_accessor *VALID_KEYS
 
-    def self.options
-      Hash[ *VALID_KEYS.map {|k| [k,self.send(k)] }.flatten ] 
+    def options
+      Hash[ *VALID_KEYS.map {|k| [k,send(k)] }.flatten ]
     end
 
-    def self.metadata_base_uri
-    end
-    def self.data_base_uri
+    def configure
+      yield self
     end
 
   end
