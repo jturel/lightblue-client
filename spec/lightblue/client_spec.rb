@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+require 'lightblue/client'
 
 describe Lightblue::Client do
 
