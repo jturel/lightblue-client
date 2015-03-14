@@ -1,6 +1,6 @@
 module Lightblue
   module Configuration
-    VALID_KEYS = [:data_base_uri, :metadata_base_uri].freeze
+    VALID_KEYS = [:data_uri, :metadata_uri].freeze
 
     attr_accessor *VALID_KEYS
 
