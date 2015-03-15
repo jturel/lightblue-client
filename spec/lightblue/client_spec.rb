@@ -2,8 +2,10 @@ require 'minitest/autorun'
 require 'lightblue/client'
 
 describe Lightblue::Client do
-
-  subject { Lightblue::Client.new( { data_uri: 'dburi', metadata_uri: 'mdburi', foo: 'bar' } ) }
+  subject do
+    Lightblue::Client.new(
+      data_uri: 'dburi', metadata_uri: 'mdburi', foo: 'bar')
+  end
 
   it 'can be initialized' do
     subject.must_be_instance_of Lightblue::Client
@@ -18,9 +20,7 @@ describe Lightblue::Client do
   end
 
   it 'forgets invalid config keys' do
-    Proc.new {
-     subject.foo
-    }.must_raise NoMethodError
+    proc { subject.foo }.must_raise NoMethodError
   end
 
   it 'is configurable' do
@@ -30,5 +30,4 @@ describe Lightblue::Client do
     client = Lightblue::Client.new
     client.data_uri.must_equal 'custom_uri'
   end
-
 end
