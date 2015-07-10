@@ -18,6 +18,7 @@ query = foo
 ```
 
 Take a look at specs/lightblue/query_spec.rb for better examples
+https://github.com/daviswahl/lightblue-client/blob/master/spec/lightblue/query_spec.rb
 
 TODO: 
 
