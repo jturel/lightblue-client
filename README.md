@@ -9,11 +9,14 @@ foo.where(foo[:baz_field].eq(10)).build
 // Syntax should generally use parentheses, because this is really ambiguous, 
 // but it seems to work apparently. 
 // Need to think about that
+
 query = foo
   .where foo[:bar].eq(:foo)
   .all entity
     .where foo[:baz].eq(foo[:gorp])
     .or foo[:scrim].eq('scram')
+
+query.build
 => {"$all"=>[{:op=>"$eq", :field=>:bar, :rvalue=>:foo}, {"$or"=>[{:op=>"$eq", :field=>:baz, :rfield=>:gorp}, {:op=>"$eq", :field=>:scrim, :rvalue=>"scram"}]}]}
 ```
 
