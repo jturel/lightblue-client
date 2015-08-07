@@ -1,6 +1,7 @@
 module Lightblue
   module HTTP
-
+    # I was using this for testing. We can do whatever we want with the client side,
+    # although Faraday is really nice.
     def get(*args, &block)
       connection.get(*args, &block)
     end
@@ -16,7 +17,6 @@ module Lightblue
     def post(*args, &block)
       connection.post(*args, &block)
     end
-
 
     def connection
       Faraday.new(url: host_uri)

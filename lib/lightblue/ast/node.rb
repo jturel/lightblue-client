@@ -13,10 +13,12 @@ module Lightblue
         ancestors[1].to_s.split('::').last.downcase + '_%s'
       end
 
-      def self.visitor_name
+      def self.name_for_visitor
         format(visitor_prefix, name.split('::').last.downcase)
       end
 
+      # The following methods need to get moved into the query node, and then the query
+      # node needs to be removed in favor of an AST wrapper that controls access to the AST.
       def any *right
         Nodes::Any.new(self, right)
       end

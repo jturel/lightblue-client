@@ -1,5 +1,10 @@
 module Lightblue
   module Visitors
+    # Performs a depth first tree traversal, yielding
+    # each node to a block. Node#each is currently implemented
+    # with this class. (Therefore, calling Node#each will perform a depth first
+    # traversal of the tree).
+
     class Traverse
       include Lightblue::Visitor
 

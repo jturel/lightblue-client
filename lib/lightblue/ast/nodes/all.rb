@@ -4,6 +4,19 @@ module Lightblue
     # Need to differentiate operators/expressions
     module Nodes
 
+      class Query < Lightblue::AST::Node
+        # Query is the root node. Calling entity#where returns a query node, which can then be used to construct
+        # the ast. We should remove it in favor of provding a wrapper that tracks the root node,
+        # as well as controls access to the underlying ast.
+        # (all of the constructor methods are currently defined in the Node parent class, which needs to change)
+        attr_reader :root
+
+        def initialize(query)
+          @root = query
+        end
+      end
+
+
       class Unary < Lightblue::AST::Node
         def initialize(*args)
         end
@@ -27,6 +40,7 @@ module Lightblue
         end
       end
 
+      # TODO: These classes don't need to be dynamic defined. This is purely to save typing for now.
       [:Eq].each do |klass|
         const_set(klass.to_s, Class.new(BinOp))
       end
@@ -55,15 +69,6 @@ module Lightblue
         def set_rfield
           @key = :rfield
           self
-        end
-      end
-
-      class Query < Lightblue::AST::Node
-
-        attr_reader :root
-
-        def initialize(query)
-          @root = query
         end
       end
 

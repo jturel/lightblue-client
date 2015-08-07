@@ -1,7 +1,7 @@
 module Lightblue
 
   module AST
-
+    # This is some DSL stuff. It is a bad idea and is almost removed
     module HasNodes
       def has_nodes(*nodes)
         nodes.each do |n|
