@@ -1,9 +1,16 @@
 module Lightblue
   module AST
 
-    # Need to differentiate operators/expressions
-    module Nodes
+    # All of the nodes are currently defined in here. Need to make better use of inheritence.
+    # Ideally, a visitor should be able to visit_nary, but currently, it has to visit_nary_(operator)
 
+    # I forsee having a handful of abstract subclasses of node, each with tons and tons of concrete classes
+    # that mostly only implement to_s
+
+    # It may also be worth creating abstract Operator and Expression classes, which Operators and Expressions can
+    # implement. Either way, we need to define which abstract node classes we expect.
+
+    module Nodes
       class Query < Lightblue::AST::Node
         # Query is the root node. Calling entity#where returns a query node, which can then be used to construct
         # the ast. We should remove it in favor of provding a wrapper that tracks the root node,
