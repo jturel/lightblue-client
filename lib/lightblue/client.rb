@@ -6,7 +6,6 @@ module Lightblue
 
   class Client
     include HTTP
-    VERSION = '0.0.1.pre'
 
     attr_accessor(*Configuration::VALID_KEYS)
 

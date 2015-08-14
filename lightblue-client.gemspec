@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'lightblue/client'
+require 'lightblue/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'lightblue-client'
-  spec.version       = Lightblue::Client::VERSION
+  spec.version       = Lightblue::VERSION
   spec.authors       = ['Jonathon Turel']
   spec.summary       = %q{Ruby client for the lightblue platform}
   spec.homepage      = ''
