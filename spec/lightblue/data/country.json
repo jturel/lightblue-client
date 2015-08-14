@@ -1,0 +1,27 @@
+{
+    "objectType": "country",
+    "version": "1.0.0",
+    "projection": {
+        "field": "_id"
+    },
+    "data": [
+        {
+            "createdBy": "jewzaam",
+            "creationDate": "20140723T00:00:00.000-0500",
+            "lastUpdatedBy": "jewzaam",
+            "lastUpdateDate": "20140723T00:00:00.000-0500",
+            "name": "United States of America",
+            "iso2Code": "US",
+            "iso3Code": "USA"
+        },
+        {
+            "createdBy": "jewzaam",
+            "creationDate": "20140723T00:00:00.000-0500",
+            "lastUpdatedBy": "jewzaam",
+            "lastUpdateDate": "20140723T00:00:00.000-0500",
+            "name": "Canada",
+            "iso2Code": "CA",
+            "iso3Code": "CAN"
+        }
+    ]
+}
