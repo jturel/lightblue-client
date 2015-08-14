@@ -12,7 +12,7 @@ describe Lightblue::Client do
   end
 
   it 'has a version' do
-    Lightblue::Client::VERSION.wont_be_nil
+    Lightblue::VERSION.wont_be_nil
   end
 
   it 'preserves valid config keys' do
