@@ -1,3 +1,4 @@
+require 'faraday'
 module Lightblue
   module HTTP
     # I was using this for testing. We can do whatever we want with the client side,
