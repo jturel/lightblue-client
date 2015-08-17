@@ -1,6 +1,5 @@
 module Lightblue
   module AST
-
     # All of the nodes are currently defined in here. Need to make better use of inheritence.
     # Ideally, a visitor should be able to visit_nary, but currently, it has to visit_nary_(operator)
 
@@ -23,14 +22,12 @@ module Lightblue
         end
       end
 
-
       class Unary < Lightblue::AST::Node
-        def initialize(*args)
+        def initialize(*)
         end
       end
 
       class Nary < Lightblue::AST::Node
-
         attr_reader :children
 
         def initialize(left, *args)
@@ -43,7 +40,7 @@ module Lightblue
 
         def initialize(left, right)
           @left = left
-          @right = right.kind_of?(Field) ? right.set_rfield : Value.new(right)
+          @right = right.respond_to?(:set_rfield) ? right.set_rfield : Value.new(right)
         end
       end
 
@@ -60,9 +57,7 @@ module Lightblue
         const_set(klass.to_s, Class.new(Unary))
       end
 
-
       class Field < Lightblue::AST::Node
-
         extend Lightblue::AST::HasNodes
         has_nodes :eq
 
@@ -86,7 +81,6 @@ module Lightblue
           @value = value
         end
       end
-
     end
   end
 end

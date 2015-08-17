@@ -1,10 +1,9 @@
 require 'lightblue/ast'
 
 module Lightblue
-
   class Entity
     def initialize(name)
-     @name = name
+      @name = name
     end
 
     def where(query)
@@ -15,5 +14,4 @@ module Lightblue
       Lightblue::AST::Nodes::Field.new(arg)
     end
   end
-
 end

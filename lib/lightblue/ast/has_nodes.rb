@@ -1,5 +1,4 @@
 module Lightblue
-
   module AST
     # This is some DSL stuff. It is a bad idea and is almost removed
     module HasNodes
@@ -13,9 +12,8 @@ module Lightblue
       end
 
       def dispatch_hash
-        @@dispatch_hash ||= {}
+        @dispatch_hash ||= {}
       end
     end
-
   end
 end

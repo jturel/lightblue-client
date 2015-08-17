@@ -19,19 +19,19 @@ module Lightblue
 
       # The following methods need to get moved into the query node, and then the query
       # node needs to be removed in favor of an AST wrapper that controls access to the AST.
-      def any *right
+      def any(*right)
         Nodes::Any.new(self, right)
       end
 
-      def all *right
+      def all(*right)
         Nodes::All.new(self, right)
       end
 
-      def or *right
+      def or(*right)
         Nodes::Or.new(self, right)
       end
 
-      def and *right
+      def and(*right)
         Nodes::And.new(self, right)
       end
       alias_method :where, :and

@@ -8,29 +8,17 @@ module Lightblue
   # this in terms of accept. e.g., InstanceOfNode#accept(visitor) will call visitor.visit(node.name_for_visitor)
 
   module Visitor
-
     class VisitorError < StandardError; end
 
-    module ClassMethods
-
-      # I stole this from Arel. It's basically just for optimization. Since it's not really optimizing
-      # much, it's probably unnecessary complexity.
-      def dispatch_hash
-        @@dispatch_hash ||= Hash.new do |h, k|
-          h[k] = format('visit_%s', k.name_for_visitor )
-        end
-      end
-
-    end
-
     module InstanceMethods
-      def visit node, *args, &blk
+      def visit(node, *args, &blk)
         dispatch(node, *args, &blk)
       end
 
       def dispatch(node, *args, &blk)
-        meth = self.class.dispatch_hash[node.class]
-        send meth, node, *args, &blk
+        # meth = self.class.dispatch_hash[node.class]
+        method = "visit_#{node.class.name_for_visitor}"
+        send(method, node, *args, &blk)
       rescue NoMethodError => e
         if e.name =~ /^visit_/
           raise VisitorError, "#{self} cannot visit #{node.class.name}, #{meth} undefined"
@@ -41,7 +29,6 @@ module Lightblue
     end
 
     def self.included(klass)
-      klass.extend ClassMethods
       klass.include InstanceMethods
     end
   end

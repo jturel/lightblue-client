@@ -8,7 +8,7 @@ describe 'queryin\'' do
       expected = { 'op' => '$eq', 'field' => 'bar', 'rvalue' => 'foo' }
 
       query = entity
-        .where entity[:bar].eq(:foo)
+              .where entity[:bar].eq(:foo)
 
       JSON.parse(query.to_json).must_equal expected
     end
@@ -19,12 +19,12 @@ describe 'queryin\'' do
       expected =
         { '$and' => [
           { 'op' => '$eq', 'field' => 'bar', 'rvalue' => 'foo' },
-          { 'op' => '$eq', 'field' => 'baz', 'rfield' => 'gorp' },
-        ]}
+          { 'op' => '$eq', 'field' => 'baz', 'rfield' => 'gorp' }
+        ] }
 
       query = entity
-        .where entity[:bar].eq(:foo)
-        .and   entity[:baz].eq(entity[:gorp])
+              .where entity[:bar].eq(:foo)
+              .and   entity[:baz].eq(entity[:gorp])
 
       JSON.parse(query.to_json).must_equal expected
     end
@@ -32,7 +32,6 @@ describe 'queryin\'' do
 
   describe 'subqueryin\'' do
     it 'should render the correct json' do
-
       # this is gonna get tiring
       expected =
         { '$all' =>
@@ -40,22 +39,19 @@ describe 'queryin\'' do
             { 'op' => '$eq', 'field' => 'bar', 'rvalue' => 'foo' },
             { '$or' =>
               [
-                {'op' => '$eq', 'field' => 'baz', 'rfield' => 'gorp' },
-                {'op' => '$eq', 'field' => 'scrim', 'rvalue' => 'scram' },
+                { 'op' => '$eq', 'field' => 'baz', 'rfield' => 'gorp' },
+                { 'op' => '$eq', 'field' => 'scrim', 'rvalue' => 'scram' }
               ]
             }
           ]
         }
-      subquery = entity
-        .where entity[:baz].eq(entity[:gorp])
-        .or    entity[:scrim].eq('scram')
 
       # I have no idea how ruby manages to parse this 'correctly' without parens
       query = entity
-        .where entity[:bar].eq(:foo)
-        .all entity
-          .where entity[:baz].eq(entity[:gorp])
-          .or   entity[:scrim].eq('scram')
+              .where entity[:bar].eq(:foo)
+              .all   entity
+              .where entity[:baz].eq(entity[:gorp])
+              .or    entity[:scrim].eq('scram')
 
       JSON.parse(entity.where(query).to_json).must_equal expected
     end
@@ -74,8 +70,9 @@ describe 'queryin\'' do
         }
 
       query = entity
-        .where(entity[:bar].eq(:foo))
-        .and entity[:baz].eq(10)
+              .where(entity[:bar].eq(:foo))
+              .and entity[:baz].eq(10)
+
       JSON.parse(query.to_json).must_equal expected
     end
   end
@@ -92,10 +89,10 @@ describe 'queryin\'' do
         }
 
       query = entity
-        .where(entity[:bar].eq(:foo))
-        .where(entity[:baz].eq(10))
+              .where(entity[:bar].eq(:foo))
+              .where(entity[:baz].eq(10))
 
-      JSON.parse(query.to_json).must_equal (expected)
+      JSON.parse(query.to_json).must_equal(expected)
     end
   end
 end

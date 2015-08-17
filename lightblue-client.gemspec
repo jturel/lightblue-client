@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'lightblue-client'
   spec.version       = Lightblue::VERSION
   spec.authors       = ['Jonathon Turel']
-  spec.summary       = %q{Ruby client for the lightblue platform}
+  spec.summary       = 'Ruby client for the lightblue platform'
   spec.homepage      = ''
   spec.license       = 'MIT'
   spec.files         = `git ls-files -z`.split("\x0")

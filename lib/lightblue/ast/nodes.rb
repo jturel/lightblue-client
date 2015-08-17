@@ -7,4 +7,3 @@ module Lightblue
     end
   end
 end
-
