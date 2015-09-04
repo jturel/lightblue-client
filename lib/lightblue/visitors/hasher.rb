@@ -21,12 +21,28 @@ module Lightblue
         @hash = { rvalue:  o.value }
       end
 
+      def visit_terminal o
+        @hash = { o.token => o.value }
+      end
+      [ :visit_node_value,
+        :visit_node_field,
+        :visit_node_valuearray,
+      ].each { |m| alias_method m, :visit_terminal }
+
+      def visit_node_fieldarray o, values
+        @hash = { o.token => values.map { |x| x.values[0] } }
+      end
+
       def visit_binop_eq o, left, right
         @hash = { op:  '$eq' }.merge(left).merge(right)
       end
 
       def visit_nary_and o, children
         @hash = { '$and' => children }
+      end
+
+      def visit_narycomp_in o, left, right
+        @hash = { op: '$in' }.merge(left).merge(right)
       end
 
       def visit_nary_or o, children
@@ -42,5 +58,4 @@ module Lightblue
       end
     end
   end
-
 end

@@ -31,6 +31,10 @@ module Lightblue
         Nodes::Or.new(self, right)
       end
 
+      def in *right
+        Nodes::In.new(self, right.flatten)
+      end
+
       def and *right
         Nodes::And.new(self, right)
       end
@@ -44,7 +48,7 @@ module Lightblue
         hasher.data
       end
 
-      def to_json
+      def json
         build.to_json
       end
     end

@@ -11,7 +11,7 @@ describe 'queryin\'' do
       query = entity
         .where entity[:bar].eq(:foo)
 
-      expect(JSON.parse(query.to_json)).to match(expected)
+      expect(JSON.parse(query.json)).to match(expected)
     end
   end
 
@@ -27,8 +27,30 @@ describe 'queryin\'' do
         .where entity[:bar].eq(:foo)
         .and   entity[:baz].eq(entity[:gorp])
 
-      expect(JSON.parse(query.to_json)).to match(expected)
+      expect(JSON.parse(query.json)).to match(expected)
     end
+  end
+
+  describe 'nary relational expressions' do
+    it 'value comparisons should render the correct json' do
+      expected =
+          { 'op' => '$in', 'field' => 'bar', 'values' => ['foo', 'bar', 'batz'] }
+
+      query = entity
+        .where(entity[:bar]).in([:foo, :bar, :batz])
+
+      expect(JSON.parse(query.json)).to match(expected)
+    end
+
+    it 'field comparisons should render the correct json' do
+      expected =
+          { 'op' => '$in', 'field' => 'bar', 'rfield' => ['foo', 'bar', 'batz'] }
+
+      query = entity
+        .where(entity[:bar]).in([entity[:foo], entity[:bar], entity[:batz]])
+      expect(JSON.parse(query.json)).to match(expected)
+    end
+
   end
 
   describe 'subqueryin\'' do
@@ -58,7 +80,7 @@ describe 'queryin\'' do
           .where entity[:baz].eq(entity[:gorp])
           .or   entity[:scrim].eq('scram')
 
-      expect(JSON.parse(entity.where(query).to_json)).to match(expected)
+      expect(JSON.parse(entity.where(query).json)).to match(expected)
     end
   end
 
@@ -77,7 +99,7 @@ describe 'queryin\'' do
       query = entity
         .where(entity[:bar].eq(:foo))
         .and entity[:baz].eq(10)
-      expect(JSON.parse(query.to_json)).to match(expected)
+      expect(JSON.parse(query.json)).to match(expected)
     end
   end
 
@@ -95,7 +117,7 @@ describe 'queryin\'' do
       query = entity
         .where(entity[:bar].eq(:foo))
         .where(entity[:baz].eq(10))
-      expect(JSON.parse(query.to_json)).to match(expected)
+      expect(JSON.parse(query.json)).to match(expected)
     end
   end
 end
