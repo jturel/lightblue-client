@@ -1,6 +1,5 @@
 require 'lightblue/configuration'
 require 'lightblue/http'
-require 'faraday'
 
 module Lightblue
   extend Configuration
