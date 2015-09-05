@@ -6,7 +6,7 @@ module Lightblue
     # traversal of the tree).
 
     class Traverse
-      include Lightblue::Visitor
+      include ::Lightblue::Visitor
 
       def visit_terminal o
         yield o

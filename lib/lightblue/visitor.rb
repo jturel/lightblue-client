@@ -42,7 +42,7 @@ module Lightblue
 
     def self.included(klass)
       klass.extend ClassMethods
-      klass.include InstanceMethods
+      klass.send(:include, InstanceMethods)
     end
   end
 end
