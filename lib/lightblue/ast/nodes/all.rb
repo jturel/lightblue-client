@@ -1,5 +1,6 @@
 module Lightblue
   module AST
+
     # All of the nodes are currently defined in here. Need to make better use of inheritence.
     # Ideally, a visitor should be able to visit_nary, but currently, it has to visit_nary_(operator)
 
@@ -44,9 +45,21 @@ module Lightblue
         end
       end
 
+      class NaryComp < Lightblue::AST::Node
+        attr_reader :left, :right
+        def initialize(left, args)
+          @left = left
+          @right = args.first.kind_of?(Field) ? FieldArray.new(args) : ValueArray.new(args)
+        end
+      end
+
       # TODO: These classes don't need to be dynamic defined. This is purely to save typing for now.
       [:Eq].each do |klass|
         const_set(klass.to_s, Class.new(BinOp))
+      end
+
+      [:In, :Nin, :NotIn].each do |klass|
+        const_set(klass.to_s, Class.new(NaryComp))
       end
 
       [:And, :Or, :All, :Any].each do |klass|
@@ -57,30 +70,52 @@ module Lightblue
         const_set(klass.to_s, Class.new(Unary))
       end
 
+
+      class FieldArray < Lightblue::AST::Node
+        attr_reader :token, :value
+
+        def initialize(values)
+          @value = values
+          @token = :rfield
+        end
+      end
+
+      class ValueArray < Lightblue::AST::Node
+        attr_reader :token, :value
+
+        def initialize(values)
+          @value = values
+          @token = :values
+        end
+      end
+
       class Field < Lightblue::AST::Node
+
         extend Lightblue::AST::HasNodes
         nodes :eq
 
-        attr_reader :key, :field
+        attr_reader :token, :value
 
-        def initialize(field)
-          @field = field
-          @key = :field
+        def initialize(value)
+          @value = value
+          @token = :field
         end
 
         def set_rfield
-          @key = :rfield
+          @token = :rfield
           self
         end
       end
 
       class Value < Lightblue::AST::Node
-        attr_reader :value
+        attr_reader :token, :value
 
         def initialize(value)
           @value = value
+          @token = :rvalue
         end
       end
+
     end
   end
 end

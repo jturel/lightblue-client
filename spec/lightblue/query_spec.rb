@@ -10,7 +10,7 @@ describe 'queryin\'' do
       query = entity
               .where entity[:bar].eq(:foo)
 
-      JSON.parse(query.to_json).must_equal expected
+      JSON.parse(query.json).must_equal expected
     end
   end
 
@@ -26,8 +26,31 @@ describe 'queryin\'' do
               .where entity[:bar].eq(:foo)
               .and   entity[:baz].eq(entity[:gorp])
 
-      JSON.parse(query.to_json).must_equal expected
+      JSON.parse(query.json).must_equal expected
     end
+  end
+
+  describe 'nary relational expressions' do
+    it 'value comparisons should render the correct json' do
+      expected =
+          { 'op' => '$in', 'field' => 'bar', 'values' => ['foo', 'bar', 'batz'] }
+
+      query = entity
+        .where(entity[:bar]).in([:foo, :bar, :batz])
+
+      JSON.parse(query.json).must_equal expected
+    end
+
+    it 'field comparisons should render the correct json' do
+      expected =
+          { 'op' => '$in', 'field' => 'bar', 'rfield' => ['foo', 'bar', 'batz'] }
+
+      query = entity
+        .where(entity[:bar]).in([entity[:foo], entity[:bar], entity[:batz]])
+
+      JSON.parse(query.json).must_equal expected
+    end
+
   end
 
   describe 'subqueryin\'' do
@@ -53,7 +76,7 @@ describe 'queryin\'' do
               .where entity[:baz].eq(entity[:gorp])
               .or    entity[:scrim].eq('scram')
 
-      JSON.parse(entity.where(query).to_json).must_equal expected
+      JSON.parse(entity.where(query).json).must_equal expected
     end
   end
 
@@ -73,7 +96,7 @@ describe 'queryin\'' do
               .where(entity[:bar].eq(:foo))
               .and entity[:baz].eq(10)
 
-      JSON.parse(query.to_json).must_equal expected
+      JSON.parse(query.json).must_equal expected
     end
   end
 
@@ -92,7 +115,7 @@ describe 'queryin\'' do
               .where(entity[:bar].eq(:foo))
               .where(entity[:baz].eq(10))
 
-      JSON.parse(query.to_json).must_equal(expected)
+      JSON.parse(query.json).must_equal(expected)
     end
   end
 end
