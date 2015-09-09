@@ -9,5 +9,6 @@ task default: :test
 Rake::TestTask.new do |t|
   t.verbose = true
   t.libs    = ['lib']
+  t.libs.push 'spec'
   t.test_files = FileList['spec/**/*_spec.rb']
 end
