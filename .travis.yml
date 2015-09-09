@@ -4,5 +4,8 @@ rvm:
   - 2.1.0
   - 2.0.0
   - 1.9.3
-#cache: bundler
+cache: bundler
+script:
+  - bundle exec rake
+  - bundle exec rake rubocop
 #bundler_args: --without development --deployment --jobs=3 --retry=3
