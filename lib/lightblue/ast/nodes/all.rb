@@ -59,7 +59,7 @@ module Lightblue
 
       class Field < Lightblue::AST::Node
         extend Lightblue::AST::HasNodes
-        has_nodes :eq
+        nodes :eq
 
         attr_reader :key, :field
 
