@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/jturel/lightblue-client.svg?branch=master)](https://travis-ci.org/jturel/lightblue-client)
 # Lightblue::Client
 
 ## Arel like queries
