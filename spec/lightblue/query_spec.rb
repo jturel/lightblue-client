@@ -33,24 +33,23 @@ describe 'queryin\'' do
   describe 'nary relational expressions' do
     it 'value comparisons should render the correct json' do
       expected =
-          { 'op' => '$in', 'field' => 'bar', 'values' => ['foo', 'bar', 'batz'] }
+          { 'op' => '$in', 'field' => 'bar', 'values' => %w(foo bar batz) }
 
       query = entity
-        .where(entity[:bar]).in([:foo, :bar, :batz])
+              .where(entity[:bar]).in([:foo, :bar, :batz])
 
       JSON.parse(query.json).must_equal expected
     end
 
     it 'field comparisons should render the correct json' do
       expected =
-          { 'op' => '$in', 'field' => 'bar', 'rfield' => ['foo', 'bar', 'batz'] }
+          { 'op' => '$in', 'field' => 'bar', 'rfield' => %w(foo bar batz) }
 
       query = entity
-        .where(entity[:bar]).in([entity[:foo], entity[:bar], entity[:batz]])
+              .where(entity[:bar]).in([entity[:foo], entity[:bar], entity[:batz]])
 
       JSON.parse(query.json).must_equal expected
     end
-
   end
 
   describe 'subqueryin\'' do

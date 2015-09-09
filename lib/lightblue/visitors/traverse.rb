@@ -12,7 +12,8 @@ module Lightblue
         yield o
       end
 
-      [ :visit_node_value,
+      [
+        :visit_node_value,
         :visit_node_field,
         :visit_node_valuearray
       ]. each { |m| alias_method m, :visit_terminal }
@@ -34,19 +35,19 @@ module Lightblue
       end
 
       [
-       :visit_nary_or,
-       :visit_nary_and,
-       :visit_nary_all,
-       :visit_nary_any
+        :visit_nary_or,
+        :visit_nary_and,
+        :visit_nary_all,
+        :visit_nary_any
       ].each { |m| alias_method m, :visit_nary }
 
       def visit_nary_comp(o, &blk)
         yield o, visit(o.left, &blk), visit(o.right, &blk)
       end
       [
-       :visit_narycomp_in,
-       :visit_narycomp_nin,
-       :visit_narycomp_not_in
+        :visit_narycomp_in,
+        :visit_narycomp_nin,
+        :visit_narycomp_not_in
       ].each { |m| alias_method m, :visit_nary_comp }
 
       def visit_binop_eq(o, &blk)

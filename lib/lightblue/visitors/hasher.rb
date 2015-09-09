@@ -1,6 +1,5 @@
 module Lightblue
   module Visitors
-
     class Hasher
       require 'json'
       include Lightblue::Visitor
@@ -24,9 +23,10 @@ module Lightblue
       def visit_terminal(o)
         @hash = { o.token => o.value }
       end
-      [ :visit_node_value,
+      [
+        :visit_node_value,
         :visit_node_field,
-        :visit_node_valuearray,
+        :visit_node_valuearray
       ].each { |m| alias_method m, :visit_terminal }
 
       def visit_node_fieldarray(o, values)
@@ -34,7 +34,7 @@ module Lightblue
       end
 
       def visit_binop_eq(_o, left, right)
-        @hash = { op:  '$eq' }.merge(left).merge(right)
+        @hash = { op: '$eq' }.merge(left).merge(right)
       end
 
       def visit_nary_and(_o, children)
