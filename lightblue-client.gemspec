@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'faraday', '~> 0.9.1'
 
+  spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'minitest', '~> 5.4'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake', '~> 10.0'

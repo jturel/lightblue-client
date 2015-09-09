@@ -1,4 +1,4 @@
-require 'lightblue'
+require File.expand_path '../../spec_helper', __FILE__
 
 describe 'queryin\'' do
   let(:entity) { Lightblue::Entity.new(:foo) }

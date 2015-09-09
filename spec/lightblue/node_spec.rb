@@ -1,4 +1,4 @@
-require 'lightblue'
+require File.expand_path '../../spec_helper', __FILE__
 
 describe Lightblue::AST::HasNodes do
   it 'Can have dispatchers added' do

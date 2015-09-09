@@ -1,5 +1,4 @@
-require 'minitest/autorun'
-require 'lightblue/client'
+require File.expand_path '../../spec_helper', __FILE__
 
 describe Lightblue::Client do
   subject do
