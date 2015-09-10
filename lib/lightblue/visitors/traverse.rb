@@ -6,14 +6,20 @@ module Lightblue
     # traversal of the tree).
 
     class Traverse
-      include Lightblue::Visitor
+      include ::Lightblue::Visitor
 
-      def visit_node_field(o)
+      def visit_terminal(o)
         yield o
       end
 
-      def visit_node_value(o)
-        yield o
+      [
+        :visit_node_value,
+        :visit_node_field,
+        :visit_node_valuearray
+      ]. each { |m| alias_method m, :visit_terminal }
+
+      def visit_node_fieldarray(o, &blk)
+        yield o, o.value.map { |f| visit f, &blk }
       end
 
       def visit_node_query(o, &blk)
@@ -28,10 +34,21 @@ module Lightblue
         yield o, o.children.map { |child| visit child, &blk }
       end
 
-      alias_method :visit_nary_or, :visit_nary
-      alias_method :visit_nary_and, :visit_nary
-      alias_method :visit_nary_all, :visit_nary
-      alias_method :visit_nary_any, :visit_nary
+      [
+        :visit_nary_or,
+        :visit_nary_and,
+        :visit_nary_all,
+        :visit_nary_any
+      ].each { |m| alias_method m, :visit_nary }
+
+      def visit_nary_comp(o, &blk)
+        yield o, visit(o.left, &blk), visit(o.right, &blk)
+      end
+      [
+        :visit_narycomp_in,
+        :visit_narycomp_nin,
+        :visit_narycomp_not_in
+      ].each { |m| alias_method m, :visit_nary_comp }
 
       def visit_binop_eq(o, &blk)
         yield o, visit(o.left, &blk), visit(o.right, &blk)
