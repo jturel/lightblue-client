@@ -8,6 +8,7 @@
 /spec/reports/
 /tmp/
 /.ruby-version
+config.yml
 /.c9
 *.bundle
 *.so
