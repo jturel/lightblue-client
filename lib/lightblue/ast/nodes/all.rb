@@ -1,3 +1,5 @@
+
+
 module Lightblue
   module AST
     # All of the nodes are currently defined in here. Need to make better use of inheritence.
