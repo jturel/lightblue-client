@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'lightblue/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'lightblue-client'
+  spec.name          = 'lightblue'
   spec.version       = Lightblue::VERSION
   spec.authors       = ['Jonathon Turel', 'Davis Wahl']
   spec.summary       = 'Ruby client for the lightblue platform'
