@@ -12,7 +12,7 @@ module Lightblue
 
     def self.get(url, params = nil, headers = nil)
       url = ENDPOINT + url
-      resp = connection.get(url, params, headers) do |req|
+      connection.get(url, params, headers) do |req|
         yield(req) if block_given?
       end
     end
@@ -23,16 +23,16 @@ module Lightblue
       end
     end
 
-    def self.delete(url, body = nil, headers = nil)
-      connection.delete(url) do |req|
+    def self.delete(url, headers = nil)
+      connection.delete(url, headers) do |req|
         yield(req) if block_given?
       end
     end
 
-    def self.disable_all(entity, version)
-      versions = versions(entity).map{ |e| e['version'] }
+    def self.disable_all(entity, versions)
+      versions = versions(entity).map { |e| e['version'] }
       versions.each do |v|
-        url = format('%s/%s/%s/%s/%s', ENDPOINT, 'metadata', entity, version, :disabled)
+        url = format('%s/%s/%s/%s/%s', ENDPOINT, 'metadata', entity, v, :disabled)
         put(url)
       end
     end
@@ -44,7 +44,7 @@ module Lightblue
 
     def self.create_metadata(entity, version, json)
       url = format('%s/%s/%s/%s', ENDPOINT, 'metadata', entity, version)
-      put(url, json.to_json, { "content-type" => "application/json" })
+      put(url, json.to_json, 'content-type' => 'application/json')
     end
 
     def self.entities(status = nil)
@@ -59,12 +59,10 @@ module Lightblue
     def self.local_metadata(entity, version)
       path = Pathname.new(File.expand_path Lightblue.metadata_path).join(entity).join("#{version}.json")
 
-      raise 'Entity Metadata does not exist' if !File.exists?(path)
+      fail 'Entity Metadata does not exist' unless File.exist?(path)
       json = JSON.parse(File.read(path))
       errors = validate_metadata(json)
-      if !errors.empty?
-        raise "Invalid Schema. #{errors}"
-      end
+      fail "Invalid Schema. #{errors}" unless errors.empty?
       json
     end
 
@@ -81,9 +79,13 @@ module Lightblue
     end
 
     def self.get_arity2(ep, arg1 = nil, arg2 = nil)
-        url = !arg1  ? '/metadata/'
-            : !arg2  ? "/metadata/#{arg1}/"
-            : "/metadata/#{arg1}/#{arg2}/"
+      url = if !arg1
+              '/metadata/'
+            elsif !arg2
+              "/metadata/#{arg1}/"
+            else
+              "/metadata/#{arg1}/#{arg2}/"
+            end
 
       get(url + ep)
     end
@@ -95,6 +97,5 @@ module Lightblue
       v = JSON::Validator
       v.fully_validate(metadata, json, fragment: '#/definitions/metadata/definitions/metadata')
     end
-
   end
 end
