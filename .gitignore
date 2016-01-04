@@ -2,10 +2,12 @@
 /.yardoc
 /Gemfile.lock
 /_yardoc/
+/.yardopts
 /coverage/
 /doc/
 /pkg/
 /spec/reports/
+/test/html_reports/
 /tmp/
 /.ruby-version
 /.c9
@@ -14,3 +16,5 @@
 *.o
 *.a
 mkmf.log
+.DS_Store
+Guardfile

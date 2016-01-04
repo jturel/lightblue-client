@@ -1,17 +1,20 @@
-require 'lightblue/ast'
-
 module Lightblue
   class Entity
-    def initialize(name)
+    attr_reader :name
+    def initialize(name = nil, options = {})
       @name = name
     end
 
-    def where(query)
-      Lightblue::AST::Nodes::Query.new(query)
+    def [](arg)
+      Lightblue::Expression.new.field(Lightblue::AST::Node.new(:field, [arg]))
     end
 
-    def [](arg)
-      Lightblue::AST::Nodes::Field.new(arg)
+    def project(projection)
+      Lightblue::Query.new(self).project(projection)
+    end
+
+    def find(expression)
+      Lightblue::Query.new(self).find(expression)
     end
   end
 end
