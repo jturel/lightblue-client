@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'test_helper'
 
 describe 'queryin\'' do
   let(:entity) { Lightblue::Entity.new(:foo) }
