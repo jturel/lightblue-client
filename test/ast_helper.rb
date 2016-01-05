@@ -15,6 +15,7 @@ module AstHelper
     children, _ = *act
     assert_equal exp, children
   end
+
   def use_ast_node_helpers
     let(:field_node) { s(:field, :bar) }
     let(:rfield_node) { s(:field, :batz) }
@@ -28,8 +29,12 @@ module AstHelper
 
     let(:array_field_node) { s(:array_field, :foo) }
     let(:field_comparison_expression_node) { s(:field_comparison_expression, field_node, binary_op_node, rfield_node) }
-    let(:binary_exp_node) { s(:binary_relational_expression,
-                              field_comparison_expression_node) }
+
+    let(:binary_exp_node) do
+      s(:binary_relational_expression,
+        field_comparison_expression_node) 
+    end
+
     let(:unresolved_exp_node) { s(:unresolved_expression, field_node, binary_op_node, rfield_node) }
   end
 end

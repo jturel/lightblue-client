@@ -4,3 +4,6 @@ Documentation:
 
 Metrics/LineLength:
   Max: 140
+
+Style/TrivialAccessors:
+  Enabled: false

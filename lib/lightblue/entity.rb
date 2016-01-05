@@ -1,7 +1,7 @@
 module Lightblue
   class Entity
     attr_reader :name
-    def initialize(name = nil, options = {})
+    def initialize(name = nil)
       @name = name
     end
 

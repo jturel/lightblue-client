@@ -7,17 +7,21 @@ class TestValidation < Minitest::Test
     @processor = Lightblue::AST::Visitors::Validation.new
   end
 
-  def test_nary_field_relational_expression_throws_on_missing_parameters
+  def test_nary_field_relational_expression_throws_on_missing_parameters_1
     exp = s(:nary_field_relational_expression,
             s(:field, :foo),
             s(:array_field, :bar))
     assert_raises(Validation::MissingQueryParameter) { @processor.process exp }
+  end
 
+  def test_nary_field_relational_expression_throws_on_missing_parameters_2
     exp = s(:nary_field_relational_expression,
             s(:nary_comparison_operator, :$in),
             s(:array_field, :bar))
     assert_raises(Validation::MissingQueryParameter) { @processor.process exp }
+  end
 
+  def test_nary_field_relational_expression_throws_on_missing_parameters_3
     exp = s(:nary_field_relational_expression,
             s(:nary_comparison_operator, :$in),
             s(:field, :bar))
@@ -47,7 +51,6 @@ class TestValidation < Minitest::Test
     @processor.process(exp)
   end
 
-
   def test_nary_comparison_operator_accepts_valid_token
     operator_accepts_valid_token(:nary_comparison_operator, :$nin)
   end
@@ -63,9 +66,11 @@ class TestValidation < Minitest::Test
   def test_binary_comparison_operator_accepts_valid_token
     operator_accepts_valid_token(:binary_comparison_operator, :"=")
   end
+
   def test_binary_comparison_operator_throws_error_on_invalid_token
     operator_throws_error_on_invalid_token(:binary_comparison_operator)
   end
+
   def test_binary_comparison_operator_throws_error_on_too_many_children
     operator_throws_error_on_too_many_children(:binary_comparison_operator)
   end
@@ -77,6 +82,7 @@ class TestValidation < Minitest::Test
   def test_nary_logical_operator_throws_error_on_invalid_token
     operator_throws_error_on_invalid_token(:nary_logical_operator)
   end
+
   def test_nary_logical_operator_throws_error_on_too_many_children
     operator_throws_error_on_too_many_children(:nary_logical_operator)
   end
@@ -183,7 +189,7 @@ class TestValidation < Minitest::Test
   end
 
   def test_boolean_throws_error_on_invalid_value
-    atom_throws_error_on_invalid_value(s(:boolean, 'string')) 
+    atom_throws_error_on_invalid_value(s(:boolean, 'string'))
   end
 
   def test_boolean_accepts_boolean_values
@@ -192,7 +198,7 @@ class TestValidation < Minitest::Test
   end
 
   def test_boolean_throws_error_on_nil
-    atom_throws_error_on_invalid_value(s(:boolean)) 
+    atom_throws_error_on_invalid_value(s(:boolean))
   end
 
   def test_pattern_throws_error_on_invalid_value
@@ -203,23 +209,23 @@ class TestValidation < Minitest::Test
 
   def test_pattern_accepts_regex_values
     atom_accepts_valid_values(s(:pattern, /foo/))
-    atom_accepts_valid_values(s(:pattern, "foo"))
+    atom_accepts_valid_values(s(:pattern, 'foo'))
   end
 
   def test_value_list_array_throws_error_on_invalid_value
     atom_throws_error_on_invalid_value(s(:value_list_array, 1))
-    atom_throws_error_on_invalid_value(s(:value_list_array, "foo"))
+    atom_throws_error_on_invalid_value(s(:value_list_array, 'foo'))
   end
 
   def test_value_list_array_accepts_value_list
-    atom_accepts_valid_values(s(:value_list_array, [1,2,3]))
-    atom_accepts_valid_values(s(:value_list_array, ['1','2','3']))
+    atom_accepts_valid_values(s(:value_list_array, [1, 2, 3]))
+    atom_accepts_valid_values(s(:value_list_array, %w(1, 2, 3)))
   end
 
   def test_array_field_throws_error_on_invalid_value
     atom_throws_error_on_invalid_value(s(:value_list_array, s(:atom, :foo), s(:atom, :foo)))
     atom_throws_error_on_invalid_value(s(:value_list_array, 1))
-    atom_throws_error_on_invalid_value(s(:value_list_array, "foo"))
+    atom_throws_error_on_invalid_value(s(:value_list_array, 'foo'))
   end
 
   def test_array_field_accepts_array_field
@@ -227,8 +233,8 @@ class TestValidation < Minitest::Test
     atom_accepts_valid_values(s(:array_field, 'one'))
   end
 
-  def test_array_field_throws_error_on_invalid_value
-    atom_throws_error_on_invalid_value(s(:field, [1,2,3]))
+  def test_field_throws_error_on_invalid_value
+    atom_throws_error_on_invalid_value(s(:field, [1, 2, 3]))
     atom_throws_error_on_invalid_value(s(:field, 1))
   end
 
@@ -238,7 +244,7 @@ class TestValidation < Minitest::Test
   end
 
   def test_field_throws_error_on_invalid_values
-    atom_throws_error_on_invalid_value(s(:field, [1,2,3]))
+    atom_throws_error_on_invalid_value(s(:field, [1, 2, 3]))
     atom_throws_error_on_invalid_value(s(:field, 1))
   end
 end
