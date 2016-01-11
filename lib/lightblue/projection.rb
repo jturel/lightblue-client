@@ -110,6 +110,7 @@ module Lightblue
     def project(expr = nil, &blk)
       @projections << expr if expr
       instance_eval(&blk) if blk
+      self
     end
 
     def field(field)

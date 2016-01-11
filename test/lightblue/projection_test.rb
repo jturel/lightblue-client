@@ -13,7 +13,7 @@ describe 'projections' do
         expected =
           s(:projection,
             s(:basic_projection, field_projection_node))
-        assert_ast_equal expected, field_projection.ast
+        assert_ast_equal expected, entity.project(field_projection).ast
       end
 
       it 'to_hash with no properties' do
