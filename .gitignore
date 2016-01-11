@@ -17,4 +17,4 @@
 *.a
 mkmf.log
 .DS_Store
-Guardfile
+/Guardfile

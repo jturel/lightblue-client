@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'ast_helper'
 include AstHelper
-describe 'wip queryin\'' do
+describe 'queryin\'' do
   let(:entity) { Lightblue::Entity.new(:foo) }
   use_ast_node_helpers
   describe 'a single expression' do
@@ -15,7 +15,7 @@ describe 'wip queryin\'' do
   end
 
   describe 'binary expressions' do
-    it 'should render the correct json wip' do
+    it 'should render the correct json' do
       expected =
         { :$and =>
                 [
@@ -66,13 +66,21 @@ describe 'wip queryin\'' do
           ]
         }
 
-      query = entity.find(
+      query = entity.find( 
         entity[:bar].eq(:foo).all(
           entity[:baz].eq(entity[:gorp])
           .or(entity[:scrim].eq(:scram))
         )
       )
 
+      assert_equal query.to_hash, expected
+    end
+
+    it 'unary_expressions' do
+      query = entity.not(
+        entity[:bar].eq(:foo)
+      )
+      expected = { :$not => { op: :$eq, field:  :bar, rvalue:  :foo } }
       assert_equal query.to_hash, expected
     end
   end
@@ -89,9 +97,8 @@ describe 'wip queryin\'' do
         }
 
       query = entity
-              .find(entity[:bar].eq(:foo))
-              .and entity[:baz].eq(10)
-
+              .find(entity[:bar].eq(:foo)
+              .and entity[:baz].eq(10))
       assert_equal query.to_hash, expected
     end
   end

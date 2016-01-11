@@ -3,25 +3,17 @@ module Lightblue
     def initialize(entity)
       @entity = entity
       @expression = Lightblue::Expression.new
+      @projection = []
     end
 
-    def find(expression)
-      @expression = @expression.find(expression)
+    def project(&blk)
+      @projections = Lightblue::Projection.new(&blk)
       self
     end
 
-    AST::Tokens::OPERATORS[:nary_logical_operator].each do |token|
-      define_method(token.to_s.delete('$')) do |*expr|
-        @expression = @expression.nary_logical_operator(token, expr)
-        self
-      end
-    end
-
-    AST::Tokens::OPERATORS[:unary_logical_operator].each do |token|
-      define_method(token.to_s.delete('$')) do |*expr|
-        @expression = @expression.unary_logical_operator(token, expr)
-        self
-      end
+    def find(expr)
+      @expression = @expression.find(expr)
+      self
     end
 
     def to_h
@@ -33,11 +25,11 @@ module Lightblue
     end
 
     def to_hash
-      v, _t = *Lightblue::AST::Visitors::DepthFirst.new do |v|
-        v.pre_order Lightblue::AST::Visitors::ExpandExpressionArgumentsVisitor.new
-        v.pre_order Lightblue::AST::Visitors::Validation.new
-        v.in_order Lightblue::AST::Visitors::HashVisitor.new
-      end.process(@expression.ast)
+
+      p = Lightblue::AST::Visitors::UnfoldVisitor.new.process(@expression.ast)
+      p = Lightblue::AST::Visitors::Validation.new.process(p)
+      v, _t  = *Lightblue::AST::Visitors::HashVisitor.new.process(p)
+
       v
     end
   end

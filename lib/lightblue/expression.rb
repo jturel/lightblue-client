@@ -1,6 +1,7 @@
 module Lightblue
   class Expression
-    attr_reader :resolved, :ast, :finds
+    attr_reader :resolved
+    attr_accessor :ast
     def initialize
       @resolved = false
       @ast = []
@@ -15,6 +16,13 @@ module Lightblue
       @resolved
     end
 
+    def apply_ast(ast)
+      raise if @ast.any?
+      @ast = Lightblue::AST::Visitors::UnfoldVisitor.new.process(ast)
+      resolve
+      self
+    end
+
     def find(expression)
       case expression
       when Lightblue::Expression
@@ -26,20 +34,29 @@ module Lightblue
     end
 
     def resolve
-      # noop if already resolved
       return self if resolved? || !@ast
-
       Lightblue::AST::Tokens::EXPRESSIONS.each do |k, v|
         next if @ast.map(&:type) != v.map(&:values).flatten
         @ast = case @ast
-               when Array then AST::Node.new(k, @ast)
-               when AST::Node then @ast.updated(k, @ast.children)
+               when Array then unfold_union(AST::Node.new(k, @ast))
+               when AST::Node then unfold_union(@ast.updated(k, @ast.children))
                end
         @resolved = true
         break
       end
       self
     end
+
+    def unfold_union(node)
+      union = Lightblue::AST::Tokens::REVERSE_UNIONS[node.type]
+      if union
+        node = node.updated(union, [node])
+        unfold_union(node)
+      else
+        node
+      end
+    end
+
 
     def nary_comparison_operator(token, expr)
       @ast = @ast.concat(
@@ -77,7 +94,7 @@ module Lightblue
       @ast = AST::Node.new(:unary_logical_expression,
                            [
                              AST::Node.new(:unary_logical_operator, [token]),
-                             @ast, expr.flatten.map(&:ast)
+                             @ast, expr.ast
                            ].flatten
                           )
       resolve
@@ -88,13 +105,15 @@ module Lightblue
       define_method(token.to_s.delete('$')) { |*expr| nary_logical_operator(token, expr) }
     end
 
-    AST::Tokens::OPERATORS[:unary_logical_operator].each do |token|
-      define_method(token.to_s.delete('$')) { |expr = nil| unary_logical_operator(token, expr) }
-    end
-
     # TODO: Dynamically defining this stuff is icky
     Lightblue::AST::Tokens::OPERATORS[:binary_comparison_operator].each do |token|
       define_method(token.to_s.delete('$')) { |expr = nil| binary_comparison_operator(token, expr) }
+    end
+
+
+    def to_hash
+      Lightblue::AST::Visitors::Validation.new.process(ast)
+      Lightblue::AST::Visitors::HashVisitor.new.process(ast)
     end
 
     private

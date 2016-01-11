@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'ast_helper'
 
-describe 'wip Visitor' do
+describe 'Visitor' do
   extend AstHelper
   use_ast_node_helpers
   let(:query1) do
@@ -49,11 +49,7 @@ describe 'wip Visitor' do
   end
 
   let(:visitor) do
-    Lightblue::AST::Visitors::DepthFirst.new do |v|
-      v.pre_order Lightblue::AST::Visitors::ExpandExpressionArgumentsVisitor.new
-      v.pre_order Lightblue::AST::Visitors::Validation.new
-      v.in_order Lightblue::AST::Visitors::HashVisitor.new
-    end
+    Lightblue::AST::Visitors::HashVisitor.new
   end
 
   describe :value_comparison_expression do
@@ -65,7 +61,7 @@ describe 'wip Visitor' do
     end
   end
 
-  describe 'wip' do
+  describe '' do
     before { @subject = :nary_value_relational_expression }
 
     it 'evaluates properly' do

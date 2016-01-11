@@ -12,6 +12,12 @@ module Lightblue
         OPERATORS.keys.include?(node.type)
       end
 
+
+      OPTIONS = {
+          projection_option: [ :include, :match, :project, :sort, :range ]
+      }
+
+
       ENUMS = OPERATORS
 
       def self.node_is_enum?(node)
@@ -37,9 +43,14 @@ module Lightblue
 
         # Not part of the spec
         maybe_boolean: [:boolean, :empty],
-        maybe_projection: [:projection, :empty],
+        maybe_projection: [:project, :empty],
         maybe_sort: [:sort, :empty]
       }
+
+      REVERSE_UNIONS = UNIONS.inject({}) do |acc, (k,v)|
+        v.each { |i| acc[i] = k }
+        acc
+      end
 
       def self.node_is_union?(node)
         UNIONS.keys.include?(node.type)
@@ -114,7 +125,7 @@ module Lightblue
 
           array_match_projection: [
             { field: :pattern },
-            { include: :maybe_boolean},
+            { include: :boolean},
             { match: :query_expression },
             { project: :maybe_projection },
             { sort: :maybe_sort }
@@ -139,7 +150,6 @@ module Lightblue
         :array,
         :field, :value,
         :boolean,
-        :empty,
         :pattern,
         :array_field,
         :value,

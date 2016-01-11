@@ -3,6 +3,7 @@ require 'lightblue/client'
 require 'lightblue/entity'
 require 'lightblue/query'
 require 'lightblue/expression'
+require 'lightblue/projection'
 require 'lightblue/version'
 
 module Lightblue
