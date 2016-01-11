@@ -1,13 +1,14 @@
 module Lightblue
   class Projection
     class IncompatibleProjectionParameters < StandardError; end
-    def initialize(field)
+    def initialize(field, entity)
       @field = field
       @include = nil
       @recursive = nil
       @projection_type = :field_projection
       @projection = nil
       @sub_sort = nil
+      @entity = entity
     end
 
     def include(bool = true)
@@ -21,25 +22,33 @@ module Lightblue
     end
 
     def !
-      @include = !@include
+      if @include.nil?
+        @include = false
+      else
+        @include = !@include
+      end
       self
     end
 
     def range(first, last)
       if @projection_type == :array_match_projection
-        raise IncompatibleProjectionParameters, 'Attempted to set range param  on a match projection'
+        fail IncompatibleProjectionParameters, 'Attempted to set range param  on a match projection'
       end
+      @include = true if @include.nil?
+
       @projection_type = :array_range_projection
       @range = [first, last]
       self
     end
 
-    def match(query)
+    def match(query = nil, &blk)
       if @projection_type == :array_match_projection
-        raise IncompatibleProjectionParameters, 'Attempted to set match param on a range projection'
+        fail IncompatibleProjectionParameters, 'Attempted to set match param on a range projection'
       end
+
+      @include = true if @include.nil?
       @projection_type = :array_match_projection
-      @match = query.ast
+      @match = Lightblue::FindManager.new(@entity).find(query, &blk).ast
       self
     end
 
@@ -49,41 +58,39 @@ module Lightblue
       self
     end
 
-    def project(expr, &blk)
-      @projection_type = :unresolved if @projection_type == :field_projection
+    def project(expr = nil, &blk)
+      fail 'Project can accept either an expression or a block' if expr && blk
 
-      if blk
-        add_projection ProjectionManager.new(&blk)
-        return self
-      end
+      add_projection(ProjectionManager.new(@entity).project(&blk)) if blk
+
       case expr
       when Array
-        expr.each {|proj| add_projection proj }
+        expr.each { |proj| add_projection proj }
       when Lightblue::Projection
         add_projection expr
-      else
       end
       self
     end
 
-    def to_ast
+    def ast
       expression.ast
     end
 
     def to_hash
-      h, _ = *expression.to_hash
+      h, = *expression.to_hash
       h
     end
 
     private
+
     def add_projection(projection)
       if !@projection
-        @projection = AST::Node.new(:maybe_projection, [projection.to_ast])
+        @projection = AST::Node.new(:maybe_projection, [projection.ast])
       elsif @projection && @projection.type == :projection
         @projection = AST::Node.new(:projection,
                                     AST::Node.new(:basic_projection_array,
                                                   [*@projection,
-                                                  projection]))
+                                                   projection]))
       end
     end
 
@@ -101,20 +108,32 @@ module Lightblue
   end
 
   class ProjectionManager
+    attr_reader :entity
+    def initialize(entity)
+      @entity = entity
+      @projections = []
+    end
 
-    def initialize(&blk)
-      @fields = []
+    def project(expr = nil, &blk)
+      @projections = expr if expr
       instance_eval(&blk)
     end
 
     def field(field)
-      f = Projection.new(field)
-      @fields << f
+      f = Projection.new(field, @entity)
+      @projections << f
       f
     end
 
-    def [](arg)
-      puts "hi"
+    def ast
+      if @projections.count > 1
+        AST::Node.new(:projection,
+                      [AST::Node.new(:basic_projection_array, @projections.map(&:ast))])
+      elsif @projections.count == 1
+        @projections.first.ast
+      else
+        []
+      end
     end
   end
 end

@@ -1,4 +1,5 @@
 module Lightblue
+  # rubocop:disable Metrics/ModuleLength
   module AST
     module Tokens
       OPERATORS = {
@@ -6,17 +7,11 @@ module Lightblue
         nary_logical_operator: [:$and, :$or, :$all, :$any],
         nary_comparison_operator: [:$in, :$not_in, :$nin],
         binary_comparison_operator: [:"=", :!=, :<, :>, :<=, :>=, :$eq, :$neq, :$lt, :$gt, :$lte, :$gte],
-        array_contains_operator: [ :$any, :$all, :$none ]
+        array_contains_operator: [:$any, :$all, :$none]
       }
       def self.node_is_operator?(node)
         OPERATORS.keys.include?(node.type)
       end
-
-
-      OPTIONS = {
-          projection_option: [ :include, :match, :project, :sort, :range ]
-      }
-
 
       ENUMS = OPERATORS
 
@@ -41,13 +36,17 @@ module Lightblue
         basic_projection: [:field_projection, :array_projection],
         array_projection: [:array_match_projection, :array_range_projection],
 
+        # Sort
+
+        sort: [:sort_key, :sort_key_array],
+
         # Not part of the spec
         maybe_boolean: [:boolean, :empty],
         maybe_projection: [:project, :empty],
         maybe_sort: [:sort, :empty]
       }
 
-      REVERSE_UNIONS = UNIONS.inject({}) do |acc, (k,v)|
+      REVERSE_UNIONS = UNIONS.inject({}) do |acc, (k, v)|
         v.each { |i| acc[i] = k }
         acc
       end
@@ -74,7 +73,7 @@ module Lightblue
           array_match_expression:    [
             { array: :array_field },
             { elemMatch: :query_expression }
-         ],
+          ],
 
           nary_field_relational_expression:  [
             { field: :field },
@@ -95,9 +94,9 @@ module Lightblue
           ],
 
           value_comparison_expression:  [
-           { field: :field },
-           { op: :binary_comparison_operator },
-           { rvalue: :value }
+            { field: :field },
+            { op: :binary_comparison_operator },
+            { rvalue: :value }
           ],
 
           regex_match_expression:  [
@@ -120,12 +119,12 @@ module Lightblue
           field_projection: [
             { field: :pattern },
             { include: :maybe_boolean },
-            { recursive: :maybe_boolean },
-         ],
+            { recursive: :maybe_boolean }
+          ],
 
           array_match_projection: [
             { field: :pattern },
-            { include: :boolean},
+            { include: :boolean },
             { match: :query_expression },
             { project: :maybe_projection },
             { sort: :maybe_sort }
@@ -148,7 +147,8 @@ module Lightblue
       ATOMS = [
         :value_list_array,
         :array,
-        :field, :value,
+        :field,
+        :value,
         :boolean,
         :pattern,
         :array_field,
@@ -165,7 +165,6 @@ module Lightblue
       def self.node_is_terminal?(node)
         TERMINALS.include?(node.type)
       end
-
 
       def self.all
         ATOMS.concat([EXPRESSIONS, OPERATORS].map(&:keys).flatten)

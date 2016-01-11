@@ -2,29 +2,29 @@ require 'test_helper'
 describe 'validation visitor' do
   include AstHelper
   use_ast_node_helpers
-  Validation = Lightblue::AST::Visitors::Validation
+  ValidationVisitor = Lightblue::AST::Visitors::ValidationVisitor
 
-    let(:processor) {Lightblue::AST::Visitors::Validation.new}
+  let(:processor) { Lightblue::AST::Visitors::ValidationVisitor.new }
 
   def test_nary_field_relational_expression_throws_on_missing_parameters_1
     exp = s(:nary_field_relational_expression,
             s(:field, :foo),
             s(:array_field, :bar))
-    assert_raises(Validation::MissingQueryParameter) { processor.process exp }
+    assert_raises(ValidationVisitor::MissingQueryParameter) { processor.process exp }
   end
 
   def test_nary_field_relational_expression_throws_on_missing_parameters_2
     exp = s(:nary_field_relational_expression,
             s(:nary_comparison_operator, :$in),
             s(:array_field, :bar))
-    assert_raises(Validation::MissingQueryParameter) { processor.process exp }
+    assert_raises(ValidationVisitor::MissingQueryParameter) { processor.process exp }
   end
 
   def test_nary_field_relational_expression_throws_on_missing_parameters_3
     exp = s(:nary_field_relational_expression,
             s(:nary_comparison_operator, :$in),
             s(:field, :bar))
-    assert_raises(Validation::MissingQueryParameter) { processor.process exp }
+    assert_raises(ValidationVisitor::MissingQueryParameter) { processor.process exp }
   end
 
   def expression_accepts_valid_token(expression, token)
@@ -34,12 +34,12 @@ describe 'validation visitor' do
 
   def expression_throws_error_on_invalid_subexpression(expression)
     op = s(expression, s(:nary_field_relational_expression))
-    assert_raises(Validation::InvalidSubexpression) { processor.process(op) }
+    assert_raises(ValidationVisitor::InvalidSubexpression) { processor.process(op) }
   end
 
   def expression_throws_error_on_too_many_children(expression)
     op = s(expression, :$not, :$bar)
-    assert_raises(Validation::TooManyChildren) { processor.process(op) }
+    assert_raises(ValidationVisitor::TooManyChildren) { processor.process(op) }
   end
 
   def test_nary_field_relational_expression_accepts_valid_parameters
@@ -105,12 +105,12 @@ describe 'validation visitor' do
 
   def operator_throws_error_on_invalid_token(operator)
     op = s(operator, :$invalid)
-    assert_raises(Validation::InvalidToken) { processor.process(op) }
+    assert_raises(ValidationVisitor::InvalidToken) { processor.process(op) }
   end
 
   def operator_throws_error_on_too_many_children(operator)
     op = s(operator, :$not, :$bar)
-    assert_raises(Validation::TooManyChildren) { processor.process(op) }
+    assert_raises(ValidationVisitor::TooManyChildren) { processor.process(op) }
   end
 
   def test_query_expression_accepts_valid_subexpressions
@@ -127,7 +127,6 @@ describe 'validation visitor' do
   end
 
   def test_comparison_expression_accepts_valid_subexpression
-
     expression_accepts_valid_token(:comparison_expression, relational_exp_node)
     expression_accepts_valid_token(:comparison_expression, array_relational_exp_node)
   end
@@ -181,7 +180,7 @@ describe 'validation visitor' do
   end
 
   def terminal_throws_error_on_invalid_value(atom)
-    assert_raises(Validation::AtomTypeMismatch, atom) { processor.process(atom) }
+    assert_raises(ValidationVisitor::TerminalTypeMismatch, atom) { processor.process(atom) }
   end
 
   def terminal_accepts_valid_values(atom)
@@ -253,7 +252,7 @@ describe 'validation visitor' do
                    s(:pattern, /foo/),
                    s(:maybe_boolean, s(:boolean, true)),
                    s(:maybe_boolean, s(:boolean, true)))
-    assert_silent {processor.process(projection)}
+    assert_silent { processor.process(projection) }
   end
 
   def test_field_projection_allows_missing_optional_parameters
@@ -263,5 +262,4 @@ describe 'validation visitor' do
                    s(:maybe_boolean, s(:empty, nil)))
     processor.process(projection)
   end
-
 end

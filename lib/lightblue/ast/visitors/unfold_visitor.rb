@@ -1,12 +1,9 @@
 module Lightblue
   module AST
     module Visitors
-
       # This processor takes nodes or raw values passed into an expression node and expands them (so that the validation
       # visitor can process them.
-      #
-      # It's sort vestigal and doesn't really make sense since we can just enforce correctness
-      # on the AST manager. So, this should probably be deprecated at some point.
+
       class UnfoldVisitor < AST::Visitor
         def on_union(node)
           node.updated(nil, process_all(node))
@@ -30,25 +27,24 @@ module Lightblue
           end
           node.updated(nil, children)
         end
-        handle_with :on_nullable_expression, [
-                      :regex_match_expression,
-                      :array_match_projection,
-                      :array_range_projection,
-                      :field_projection ]
+        handle_with :on_nullable_expression,
+                    [:regex_match_expression,
+                     :array_match_projection,
+                     :array_range_projection,
+                     :field_projection]
 
         def handler_missing(node)
         end
+
         def on_terminal(node)
           node
         end
         handle_with :on_terminal, Lightblue::AST::Tokens::TERMINALS
 
-        def on_maybe(node)
-          child, _ = *node
+        def on_maybe(node) # rubocop:disable Metrics/CyclomaticComplexity
+          child, = *node
           return node.updated(nil, [AST::Node.new(:empty, [nil])]) if child == :empty || child.nil?
-          if child.is_a? AST::Node
-            return node.updated(nil, process_all(node))
-          end
+          return node.updated(nil, process_all(node)) if child.is_a? AST::Node
 
           key = case node.type
                 when :maybe_boolean then :boolean
@@ -62,11 +58,10 @@ module Lightblue
                 end
           node.updated(nil, [AST::Node.new(key, [child])])
         end
-        handle_with :on_maybe, [ :maybe_boolean,
-                                 :maybe_sort,
-                                 :maybe_projection ]
-
-     end
-   end
+        handle_with :on_maybe, [:maybe_boolean,
+                                :maybe_sort,
+                                :maybe_projection]
+      end
+    end
   end
 end

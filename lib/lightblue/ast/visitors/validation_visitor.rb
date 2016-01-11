@@ -2,7 +2,7 @@ require 'ast'
 module Lightblue
   module AST
     module Visitors
-      class Validation < Lightblue::AST::Visitor
+      class ValidationVisitor < Lightblue::AST::Visitor
         class TooManyChildren < StandardError; end
         class InvalidToken < StandardError; end
         class InvalidLiteralType < StandardError; end
@@ -13,7 +13,8 @@ module Lightblue
         class BadParameterOrdering < StandardError; end
         class UnknownNode < StandardError; end
         class MissingChild < StandardError; end
-        class AtomTypeMismatch < StandardError; end
+        class TerminalTypeMismatch < StandardError; end
+        class InvalidRange < StandardError; end
 
         def on_operator(node)
           tokens = Tokens::OPERATORS[node.type]
@@ -26,7 +27,7 @@ module Lightblue
           end
           node
         end
-        handle_with(:on_operator, Lightblue::AST::Tokens::OPERATORS.keys)
+        handle_with :on_operator, Lightblue::AST::Tokens::OPERATORS.keys
 
         def on_union(node)
           tokens = Tokens::UNIONS[node.type]
@@ -41,7 +42,7 @@ module Lightblue
           process_all(node)
           nil
         end
-        handle_with(:on_union, Lightblue::AST::Tokens::UNIONS.keys)
+        handle_with :on_union, Lightblue::AST::Tokens::UNIONS.keys
 
         def on_maybe_boolean(node)
           child, = *node
@@ -49,7 +50,7 @@ module Lightblue
           when :boolean then process_all node
           when :empty then process_all node
           else
-            raise InvalidSubexpression, "Expected Boolean | Empty, got #{child.type}"
+            fail InvalidSubexpression, "Expected Boolean | Empty, got #{child.type}"
           end
           nil
         end
@@ -60,7 +61,7 @@ module Lightblue
           when :projection then process_all node
           when :empty then process_all node
           else
-            raise InvalidSubexpression, "Expected Projection | Empty, got #{child.type}"
+            fail InvalidSubexpression, "Expected Projection | Empty, got #{child.type}"
           end
           nil
         end
@@ -71,7 +72,7 @@ module Lightblue
           when :sort then process_all node
           when :empty then process_all node
           else
-            raise InvalidSubexpression, "Expected Sort | Empty, got #{child.type}"
+            fail InvalidSubexpression, "Expected Sort | Empty, got #{child.type}"
           end
           nil
         end
@@ -85,97 +86,109 @@ module Lightblue
           process_all(node)
           nil
         end
-        handle_with(:on_expression, Lightblue::AST::Tokens::EXPRESSIONS.keys)
+        handle_with :on_expression, Lightblue::AST::Tokens::EXPRESSIONS.keys
 
         def on_field_or_array(node)
           fail InvalidTerminal, node if node.children.any? { |n| n.is_a?(AST::Node) }
           process_all node
+          nil
         end
 
         def on_boolean(node)
-          value, _tail = *node
+          value, = *node
           case value
-          when TrueClass then nil
-          when FalseClass then nil
+          when TrueClass
+          when FalseClass
           else
-            fail AtomTypeMismatch, "Expected a TrueClass | FalseClass, got #{value}"
+            fail TerminalTypeMismatch, "Expected a TrueClass | FalseClass, got #{value}"
           end
+          nil
         end
 
         def on_empty(node)
-          child, _tail = *node
-          fail AtomTypeMismatch, "Expected nil, got #{child}" if child
+          child, = *node
+          fail TerminalTypeMismatch, "Expected nil, got #{child}" if child
           process_all node
           nil
         end
 
         def on_pattern(node)
-          value, _tail = *node
+          value, = *node
           case value
-          when Regexp then nil
-          when String then nil
-          when Symbol then nil
+          when Regexp
+          when String
+          when Symbol
           else
-            fail AtomTypeMismatch, "Expected a Regexp | String, got #{value}"
+            fail TerminalTypeMismatch, "Expected a Regexp | String, got #{value}"
           end
+          nil
         end
 
         def on_value_list_array(node)
-          children, _tail = *node
+          children, = *node
           case children
-          when Array then node
+          when Array
           else
-            fail AtomTypeMismatch, "Expected an Array of Values, got #{node.children}"
+            fail TerminalTypeMismatch, "Expected an Array of Values, got #{node.children}"
           end
           nil
         end
 
         def on_field(node)
-          child, _tail = *node
+          child, = *node
           case child
-          when String then node
-          when Symbol then node
+          when String
+          when Symbol
           else
-            fail AtomTypeMismatch, "Expected a field, got #{node.children}"
+            fail TerminalTypeMismatch, "Expected a field, got #{node.children}"
           end
+          nil
         end
 
         def on_array_field(node)
-          child, _tail = *node
+          child, = *node
           case child
-          when String then node
-          when Symbol then node
+          when String
+          when Symbol
           else
-            fail AtomTypeMismatch, "Expected a field, got #{node.children}"
+            fail TerminalTypeMismatch, "Expected a field, got #{node.children}"
           end
+          nil
         end
 
         def on_value(node)
           child, tail = *node
-          fail AtomTypeMismatch, "Expected a value, got a collection #{node.children}" if tail
+          fail TerminalTypeMismatch, "Expected a value, got a collection #{node.children}" if tail
           case child
           when Array
-            fail AtomTypeMismatch, "Expected a value, got a collection #{node.children}"
+            fail TerminalTypeMismatch, "Expected a value, got a collection #{node.children}"
           when Hash
-            fail AtomTypeMismatch, "Expected a value, got a collection #{node.children}"
-          else
-            node
+            fail TerminalTypeMismatch, "Expected a value, got a collection #{node.children}"
           end
+          nil
         end
+
         def on_query_array(node)
           invalid = node.reject do |child|
             [:query_expression, :nary_logical_expression, :unary_logical_expression].include? child.type
           end
-          if invalid.any?
-            raise AtomTypeMismatch, invalid
-          end
+          fail TerminalTypeMismatch, invalid if invalid.any?
           process_all(node)
           nil
         end
+
+        def on_range(node)
+          child, = *node
+          fail InvalidRange if child.length > 2
+          a, b = *child
+          fail InvalidRange if a > b
+          nil
+        end
+
         def handler_missing(node)
           fail UnknownNode, node
         end
       end
     end
   end
-end 
+end

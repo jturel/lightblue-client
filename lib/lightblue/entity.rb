@@ -1,36 +1,23 @@
 module Lightblue
-
   class Entity
-    attr_reader :name
-    def initialize(name = nil)
+    attr_reader :name, :version
+    def initialize(name, version = nil)
       @name = name
+      @version = version
     end
 
-    def [](arg)
-      Lightblue::Expression.new.field(Lightblue::AST::Node.new(:field, [arg]))
+    def project(expr = nil, &blk)
+      Lightblue::Query.new(self).project(expr, &blk)
     end
 
-    def project(*projection)
-      Lightblue::Query.new(self).project(projection)
+    def find(expr = nil, &blk)
+      Lightblue::Query.new(self).find(expr, &blk)
     end
 
-    def find(expr)
-      Lightblue::Query.new(self).find(expr)
+    def not(expr = nil, &blk)
+      q = Lightblue::Query.new(self)
+      q.find_manager.unary_logical_operator(:$not, expr, &blk)
+      q
     end
-
-    def unary_logical_operator(token, expr)
-      expr = AST::Node.new(:unary_logical_expression,
-                           [
-                             AST::Node.new(:unary_logical_operator, [token]),
-                             @ast, expr.ast
-                           ].flatten.compact
-                          )
-
-      Lightblue::Query.new(self).find(expr)
-    end
-    AST::Tokens::OPERATORS[:unary_logical_operator].each do |token|
-      define_method(token.to_s.delete('$')) { |expr = nil| unary_logical_operator(token, expr) }
-    end
-
   end
 end

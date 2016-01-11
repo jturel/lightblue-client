@@ -1,6 +1,7 @@
 module Lightblue
+  # A lot of this needs to get moved to the FindManager
+  # This class should handle operations on the AST
   class Expression
-    attr_reader :resolved
     attr_accessor :ast
     def initialize
       @resolved = false
@@ -12,12 +13,16 @@ module Lightblue
       self
     end
 
+    def [](arg)
+      field(Lightblue::AST::Node.new(:field, [arg]))
+    end
+
     def resolved?
       @resolved
     end
 
     def apply_ast(ast)
-      raise if @ast.any?
+      fail if @ast.any?
       @ast = Lightblue::AST::Visitors::UnfoldVisitor.new.process(ast)
       resolve
       self
@@ -57,7 +62,6 @@ module Lightblue
       end
     end
 
-
     def nary_comparison_operator(token, expr)
       @ast = @ast.concat(
         [Lightblue::AST::Node.new(:nary_comparison_operator, [token]),
@@ -79,7 +83,7 @@ module Lightblue
       self
     end
 
-    def nary_logical_operator(token, *expr)
+    def nary_logical_operator(token, expr = nil)
       @ast = AST::Node.new(:nary_logical_expression,
                            [
                              AST::Node.new(:nary_logical_operator, [token]),
@@ -110,9 +114,8 @@ module Lightblue
       define_method(token.to_s.delete('$')) { |expr = nil| binary_comparison_operator(token, expr) }
     end
 
-
     def to_hash
-      Lightblue::AST::Visitors::Validation.new.process(ast)
+      Lightblue::AST::Visitors::ValidationVisitor.new.process(ast)
       Lightblue::AST::Visitors::HashVisitor.new.process(ast)
     end
 

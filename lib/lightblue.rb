@@ -4,6 +4,7 @@ require 'lightblue/entity'
 require 'lightblue/query'
 require 'lightblue/expression'
 require 'lightblue/projection'
+require 'lightblue/find_manager'
 require 'lightblue/version'
 
 module Lightblue

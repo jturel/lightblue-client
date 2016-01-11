@@ -2,7 +2,6 @@ module Lightblue
   module AST
     module Visitors
       class HashVisitor < Lightblue::AST::Visitor
-
         # This folds union types
         def on_union(node)
           node.updated(nil, process(*node))
@@ -13,15 +12,10 @@ module Lightblue
           fields = Lightblue::AST::Tokens::EXPRESSIONS[node.type].map(&:keys).flatten
           hash = {}
 
-          node.each_with_index  do |child, index|
-            oc = child.dup
-            if child.terminal?
-              #noop
-            else
-              child = process(child)
-            end
+          node.each_with_index do |child, index|
+            child = process(child) unless child.terminal?
             next if child.nil? || child.type == :empty || child == :empty
-            hash[fields[index]], _ = *child
+            hash[fields[index]], = *child
           end
           node.updated(nil, [hash])
         end
@@ -48,15 +42,34 @@ module Lightblue
         end
 
         def on_terminals(node)
-          value, tail = *node
+          value, = *node
           value
         end
         handle_with :on_terminals, Lightblue::AST::Tokens::TERMINALS
         handle_with :on_terminals, [:maybe_boolean, :maybe_sort]
 
-        def on_maybe_projection node
+        def on_maybe_projection(node)
           value, = *node.updated(nil, process_all(node))
           value
+        end
+
+        def on_request(node)
+          process_all(node).inject({}) { |a, e| a.update(*e.children) }
+        end
+
+        def on_request_query(node)
+          v, = *process(*node)
+          node.updated(nil, [{ query: v }])
+        end
+
+        def on_request_projection(node)
+          v, = *process(*node)
+          node.updated(nil, [{ projection: v }])
+        end
+
+        def on_object_type(node)
+          v, = *node
+          node.updated(nil, [{ entity: v }])
         end
       end
     end
