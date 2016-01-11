@@ -1,7 +1,6 @@
 require 'test_helper'
-require 'ast_helper'
 
-describe Lightblue::AST::Visitors::UnfoldVisitor do
+describe 'Lightblue::AST::Visitors::UnfoldVisitor' do
   include AstHelper
   use_ast_node_helpers
 

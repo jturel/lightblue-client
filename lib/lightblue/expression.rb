@@ -116,7 +116,7 @@ module Lightblue
 
     def to_hash
       Lightblue::AST::Visitors::ValidationVisitor.new.process(ast)
-      Lightblue::AST::Visitors::HashVisitor.new.process(ast)
+      Lightblue::AST::Visitors::HashVisitor.new.process(ast).children[0]
     end
 
     private

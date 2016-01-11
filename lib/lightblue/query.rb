@@ -1,25 +1,37 @@
 module Lightblue
   # Entry point to the primary DSL
+  #
+  # Query Constructors accept either an instance of {Expression}, or a
+  # block which will be executed in the scope of the Manager class (Find, Sort, Project) being called.
+  #
+  # In General, you should use a block to construct a new expression. Then, once the expression has been generated,
+  # you can use it to compose other queries.
+  #
+  # @example
+  #   Query.new(:foo).find { field[:bar].eq(:batz) }
+
   class Query
+    attr_reader :find_manager, :projection_manager
     def initialize(entity)
       @entity = entity
       @find_manager = Lightblue::FindManager.new(@entity)
       @projection_manager = Lightblue::ProjectionManager.new(@entity)
     end
 
+    # @!group Query Constructors
+
     def project(expr = nil, &blk)
       @projection_manager.project(expr, &blk)
       self
     end
+    # @!endgroup
 
-    def find_manager
-      @find_manager
-    end
-
+    # @!group Query Constructors
     def find(expr = nil, &blk)
       @find_manager.find(expr, &blk)
       self
     end
+    # @!endgroup
 
     # TODO
     def client

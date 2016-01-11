@@ -6,6 +6,6 @@ Coveralls.wear!
 
 require 'pry'
 
-require 'lightblue'
 require 'ast_helper'
+require 'lightblue'
 require 'minitest/autorun'

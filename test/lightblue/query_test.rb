@@ -8,8 +8,8 @@ describe 'queryin\'' do
   describe 'a single expression' do
     it 'should render the correct hash' do
       expected = { op: :$eq, field: :bar, rvalue: :foo }
-      query = entity.find { f[:bar].eq(:foo) }
-      assert_equal query.send(:find_hash), expected
+      find = entity.find { f[:bar].eq(:foo) }
+      assert_equal find.to_hash, expected
     end
   end
 
@@ -23,13 +23,13 @@ describe 'queryin\'' do
                 ]
         }
 
-      query =
+      find =
         entity.find do
           field['bar'].eq('foo')
           .and(field[:baz].eq(field[:gorp]))
         end
 
-      assert_equal query.send(:find_hash), expected
+      assert_equal find.to_hash, expected
     end
   end
 
@@ -38,23 +38,23 @@ describe 'queryin\'' do
       expected =
         { op: :$in, field: :bar, values: [:foo, :bar, :batz] }
 
-      query = entity.find { field[:bar].in([:foo, :bar, :batz]) }
-      assert_equal query.send(:find_hash), expected
+      find = entity.find { field[:bar].in([:foo, :bar, :batz]) }
+      assert_equal find.to_hash, expected
     end
 
     it 'field comparisons should render the correct hash' do
       expected = { op: :$in, field: :bar, rfield: :foo }
 
-      query = entity .find { field[:bar].in(field[:foo]) }
-      assert_equal query.send(:find_hash), expected
+      find = entity .find { field[:bar].in(field[:foo]) }
+      assert_equal find.to_hash, expected
     end
   end
 
   describe 'subqueryin\'' do
     it 'unary_expressions' do
-      query = entity.not { field[:bar].eq(:foo) }
+      find = entity.not { field[:bar].eq(:foo) }
       expected = { :$not => { op: :$eq, field:  :bar, rvalue:  :foo } }
-      assert_equal query.send(:find_hash), expected
+      assert_equal find.to_hash, expected
     end
   end
 
@@ -68,15 +68,15 @@ describe 'queryin\'' do
           ]
         }
 
-      query = entity.find { field[:bar].eq(:foo).and(field[:baz].eq(10)) }
-      assert_equal query.send(:find_hash), expected
+      find = entity.find { field[:bar].eq(:foo).and(field[:baz].eq(10)) }
+      assert_equal find.to_hash, expected
     end
   end
 
   describe 'projecting' do
     it 'should render the correct hash' do
       query =
-        entity.project do
+        Lightblue::Query.new(entity).project do
           field(:foo)
           .range(1, 2)
           .project { !field(:bar) }
@@ -126,7 +126,7 @@ describe 'queryin\'' do
           }
         }
 
-      query = entity.find do
+      query = Lightblue::Query.new(entity).find do
         field[:bar]
         .eq(:foo)
         .all(field[:baz]

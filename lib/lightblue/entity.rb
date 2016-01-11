@@ -7,17 +7,15 @@ module Lightblue
     end
 
     def project(expr = nil, &blk)
-      Lightblue::Query.new(self).project(expr, &blk)
+      Lightblue::ProjectionManager.new(self).project(expr, &blk)
     end
 
     def find(expr = nil, &blk)
-      Lightblue::Query.new(self).find(expr, &blk)
+      Lightblue::FindManager.new(self).find(expr, &blk)
     end
 
     def not(expr = nil, &blk)
-      q = Lightblue::Query.new(self)
-      q.find_manager.unary_logical_operator(:$not, expr, &blk)
-      q
+      Lightblue::FindManager.new(self).unary_logical_operator(:$not, expr, &blk)
     end
   end
 end

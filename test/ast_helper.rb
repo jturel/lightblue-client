@@ -5,6 +5,10 @@ require './lib/lightblue/ast'
 module AstHelper
   include Lightblue::AST::Sexp
 
+  def self.included(klass)
+    klass.send(:extend, self)
+  end
+
   def assert_ast_equal(exp, act, msg = nil)
     msg = msg ? "#{msg}\n\n" : "\n"
     diff = AstHelper.pretty_diff(exp, act)
@@ -48,9 +52,7 @@ module AstHelper
     let(:field_comparison_exp_node) { s(:field_comparison_expression, field_node, binary_op_node, rfield_node) }
     let(:value_comparison_exp_node) { s(:value_comparison_expression, field_node, binary_op_node, value_node) }
 
-    let(:binary_exp_node) do
-      s(:binary_relational_expression, field_comparison_exp_node)
-    end
+    let(:binary_exp_node) { s(:binary_relational_expression, field_comparison_exp_node) }
 
     let(:relational_exp_node) { s(:relational_expression, binary_exp_node) }
     let(:array_contains_exp_node) do
@@ -106,10 +108,7 @@ module AstHelper
         s(:maybe_boolean, s(:empty, nil)))
     end
 
-    let(:projection_node) do
-      s(:projection,
-        s(:basic_projection, field_projection_node))
-    end
+    let(:projection_node) { s(:projection, s(:basic_projection, field_projection_node)) }
 
     let(:array_match_projection_node) do
       s(:array_match_projection,

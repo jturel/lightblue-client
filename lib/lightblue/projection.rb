@@ -77,8 +77,7 @@ module Lightblue
     end
 
     def to_hash
-      h, = *expression.to_hash
-      h
+      expression.to_hash
     end
 
     private
@@ -115,8 +114,8 @@ module Lightblue
     end
 
     def project(expr = nil, &blk)
-      @projections = expr if expr
-      instance_eval(&blk)
+      @projections << expr if expr
+      instance_eval(&blk) if blk
     end
 
     def field(field)
