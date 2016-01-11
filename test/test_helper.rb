@@ -8,4 +8,5 @@ require 'pry'
 
 require 'ast_helper'
 require 'lightblue'
+gem 'minitest'
 require 'minitest/autorun'

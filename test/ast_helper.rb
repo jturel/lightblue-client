@@ -29,8 +29,8 @@ module AstHelper
     width = [diff.left, diff.right].map { |x| x.split("\n").max_by(&:size).to_s.size }.max
     str = ''
     ([diff.left.lines.count, diff.right.lines.count].max).times do |i|
-      l = diff.left.lines[i].to_s.delete("\n")
-      r = diff.right.lines[i].to_s.delete("\n")
+      l = diff.left.lines.to_a[i].to_s.delete("\n")
+      r = diff.right.lines.to_a[i].to_s.delete("\n")
       w = ' ' * (width - l.size + 10)
       str << "#{l}#{w}#{r}\n"
     end
