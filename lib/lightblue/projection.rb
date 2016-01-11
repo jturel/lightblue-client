@@ -52,12 +52,6 @@ module Lightblue
       self
     end
 
-    def sort(sort)
-      @projection_type = :unresolved if @projection_type == :field_projection
-      @sort = sort
-      self
-    end
-
     def project(expr = nil, &blk)
       fail 'Project can accept either an expression or a block' if expr && blk
 

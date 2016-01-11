@@ -9,15 +9,6 @@ module Lightblue
         binary_comparison_operator: [:"=", :!=, :<, :>, :<=, :>=, :$eq, :$neq, :$lt, :$gt, :$lte, :$gte],
         array_contains_operator: [:$any, :$all, :$none]
       }
-      def self.node_is_operator?(node)
-        OPERATORS.keys.include?(node.type)
-      end
-
-      ENUMS = OPERATORS
-
-      def self.node_is_enum?(node)
-        ENUMS.keys.include?(node.type)
-      end
 
       UNIONS = {
         # Queries
@@ -49,10 +40,6 @@ module Lightblue
       REVERSE_UNIONS = UNIONS.inject({}) do |acc, (k, v)|
         v.each { |i| acc[i] = k }
         acc
-      end
-
-      def self.node_is_union?(node)
-        UNIONS.keys.include?(node.type)
       end
 
       EXPRESSIONS =
@@ -140,10 +127,6 @@ module Lightblue
 
         }
 
-      def self.node_is_expression?(node)
-        EXPRESSIONS.keys.include?(node.type)
-      end
-
       ATOMS = [
         :value_list_array,
         :array,
@@ -156,19 +139,7 @@ module Lightblue
         :empty
       ]
 
-      def self.node_is_atom?(node)
-        ATOMS.include?(node.type)
-      end
-
       TERMINALS = ATOMS.concat(OPERATORS.keys)
-
-      def self.node_is_terminal?(node)
-        TERMINALS.include?(node.type)
-      end
-
-      def self.all
-        ATOMS.concat([EXPRESSIONS, OPERATORS].map(&:keys).flatten)
-      end
     end
   end
 end

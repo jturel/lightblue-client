@@ -11,7 +11,6 @@ module Lightblue
         def on_expression(node)
           fields = Lightblue::AST::Tokens::EXPRESSIONS[node.type].map(&:keys).flatten
           hash = {}
-
           node.each_with_index do |child, index|
             child = process(child) unless child.terminal?
             next if child.nil? || child.type == :empty || child == :empty
