@@ -14,7 +14,10 @@ query =
     .all(field[:baz]
           .eq(field[:gorp])
           .or(field[:scrim].eq(:scram)))
+end.project do
+  field(:bar).match(entity.find { field[:flim].eq(:flam) })
 end
+
 
 query.to_hash
 =>
