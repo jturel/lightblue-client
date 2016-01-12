@@ -1,3 +1,4 @@
+require 'json'
 module Lightblue
   module Metadata
     ENDPOINT = 'rest'

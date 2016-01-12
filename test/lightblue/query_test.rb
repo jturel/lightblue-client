@@ -85,25 +85,35 @@ describe 'queryin\'' do
       query.find { field[:bar].eq(:foo) }
 
       expected = {
-        entity: :foo,
+        objectType: :foo,
         query: {
           field: :bar, op: :$eq, rvalue: :foo
         },
-        projection: {
+        projection: [{
           field: :foo,
           include: true,
           range: [1, 2],
           project: {
             field: :bar, include: false
           }
-        }
+        }]
       }
       assert_equal expected, query.to_hash
     end
-
+    describe 'projection arrays' do
+      it 'should render the correct hash' do
+        q = Lightblue::Query.new(entity).project do
+          field(:foo)
+          field('bar').recursive
+        end
+        q.find { field[:batz].eq(:s) }
+        assert_equal({ objectType: :foo, query: { field: :batz, op: :$eq, rvalue: :s },
+                       projection: [{ field: :foo }, { field: 'bar', recursive: true }] }, q.to_hash)
+      end
+    end
     it 'should render the correct hash' do
       expected =
-        { entity: :foo,
+        { objectType: :foo,
           query:
             { :$all =>
               [
@@ -116,14 +126,14 @@ describe 'queryin\'' do
                 }
               ]
             },
-          projection: {
+          projection: [{
             field: :bar,
             include: true,
             match: {
               field: :flim,
               op: :$eq,
               rvalue: :flam }
-          }
+          }]
         }
 
       query = Lightblue::Query.new(entity).find do

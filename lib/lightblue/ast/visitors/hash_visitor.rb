@@ -31,13 +31,13 @@ module Lightblue
         end
 
         def on_expression_array(node)
-          node.updated(nil, process_all(node))
+          node.updated(nil, [process_all(node).map(&:children).flatten])
         end
         handle_with :on_expression_array, [:query_array, :basic_projection_array]
 
         def on_nary_logical_expression(node)
           op, children = *process_all(node)
-          node.updated(nil, [{ op => children.map(&:children).flatten }])
+          node.updated(nil, [{ op => children.children.flatten }])
         end
 
         def on_terminals(node)
@@ -62,13 +62,13 @@ module Lightblue
         end
 
         def on_request_projection(node)
-          v, = *process(*node)
-          node.updated(nil, [{ projection: v }])
+          v, = *process_all(node)
+          node.updated(nil, [{ projection: v.children.flatten }])
         end
 
         def on_object_type(node)
           v, = *node
-          node.updated(nil, [{ entity: v }])
+          node.updated(nil, [{ objectType: v }])
         end
       end
     end

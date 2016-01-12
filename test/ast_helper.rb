@@ -1,9 +1,15 @@
 require 'test_helper'
 require './lib/lightblue/ast'
-# rubocop:disable Metrics/AbcSize
-# rubocop:disable Metrics/MethodLength
+# rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/ModuleLength
 module AstHelper
   include Lightblue::AST::Sexp
+  def make_hash(ast)
+    Lightblue::AST::Visitors::HashVisitor.new.process(ast)
+  end
+
+  def expand(ast)
+    Lightblue::AST::Visitors::UnfoldVisitor.new.process(ast)
+  end
 
   def self.included(klass)
     klass.send(:extend, self)

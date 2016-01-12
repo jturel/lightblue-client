@@ -37,7 +37,7 @@ namespace :lightblue do
       entity = ENV['ENTITY']
       version = ENV['VERSION']
       Lightblue::Metadata.disable_all(entity, version)
-      Lightblue::Metadata.delete_metadata(entityn)
+      Lightblue::Metadata.delete_metadata(entity)
     end
   end
 

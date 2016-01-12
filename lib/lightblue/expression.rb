@@ -17,6 +17,16 @@ module Lightblue
       field(Lightblue::AST::Node.new(:field, [arg]))
     end
 
+    def match(other)
+      ast = AST::Node.new(:regex_match_expression,
+                          [AST::Node.new(:field, [:sku]),
+                           AST::Node.new(:pattern, [other])])
+      @ast = Lightblue::AST::Visitors::UnfoldVisitor.new.process(ast)
+      resolve
+      self
+    end
+    alias_method :=~, :match
+
     def resolved?
       @resolved
     end

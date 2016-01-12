@@ -177,6 +177,9 @@ module Lightblue
           nil
         end
 
+        def on_basic_projection_array(node)
+        end
+
         def on_range(node)
           child, = *node
           fail InvalidRange if child.length > 2
