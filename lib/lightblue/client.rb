@@ -1,5 +1,6 @@
 require 'lightblue/configuration'
 require 'lightblue/http'
+require 'lightblue'
 
 module Lightblue
   extend Configuration

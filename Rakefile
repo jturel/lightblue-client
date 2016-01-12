@@ -1,6 +1,8 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'rubocop/rake_task'
+require './lib/lightblue'
+import './lib/tasks/lightblue.rake'
 
 RuboCop::RakeTask.new
 

@@ -11,7 +11,7 @@ module Lightblue
   #   Query.new(:foo).find { field[:bar].eq(:batz) }
 
   class Query
-    attr_reader :find_manager, :projection_manager
+    attr_reader :find_manager, :projection_manager, :entity
     def initialize(entity)
       @entity = entity
       @find_manager = Lightblue::FindManager.new(@entity)
@@ -44,7 +44,6 @@ module Lightblue
     def to_ast
       find = validate(unfold(@find_manager.ast))
       projections = validate(unfold(@projection_manager.ast))
-
       AST::Node.new(:request,
                     [
                       AST::Node.new(:object_type, [@entity.name]),
@@ -65,7 +64,7 @@ module Lightblue
     private
 
     def projection_hash
-      h, = *ast_to_hash(validate(unfold(find_ast)))
+      h = ast_to_hash(validate(unfold(projection_ast)))
       h
     end
 
