@@ -1,13 +1,51 @@
+require 'lightblue/expressions/search.rb'
+require 'lightblue/expressions/update.rb'
+require 'lightblue/expressions/sort.rb'
+require 'lightblue/expressions/projection.rb'
 module Lightblue
-  # A lot of this needs to get moved to the FindManager
-  # This class should handle operations on the AST
+  # The Expression class wraps and manipulates the AST for each expression type specified by Lightblue. It is the only class that should
+  # operate directly on the AST.
+  #
+  # There is one expression subclass for each of the primary expressions specified by Lightblue: Search, Projection, Sort, and Update.
+  #
+  # Expressions are meant to be used in two ways:
+  #   - Instantiated directly by the user, so they may be used and reused to compose a larger query or queries.
+  #   - Insantiated by the Query/Manager DSLs, which then composes them them into a query. The difference is that the builder/DSL
+  #     syntax makes it more difficult to expose the Expression for reuse at a later time.them to build a query.
+  #
+  # Expressions generally expose methods corresponding to the operators and terminals defined under the Lightblue spec.
+  # However, other methods might be useful. These methods must return a new instance of Expression instantiated with the tranformed AST.
+  #
+  # @abstract
   class Expression
+    def initialize(ast = ast_root)
+      @ast = ast
+    end
+
+    # @abstract
+    def ast_root
+    end
+
+    private
+
+    # The private methods are simply helpers for dealing with the AST.
+    def new_node(type, children)
+      Lightblue::AST::Node.new(type, children)
+    end
+  end
+end
+=begin
+  class Expression
+
     attr_accessor :ast
-    def initialize
+    def initialize(ast = Lightblue::AST::Node
       @resolved = false
       @ast = []
     end
 
+    @abstract
+    def ast_root
+    end
     def field(expression)
       @ast = @ast.concat([expression])
       self
@@ -140,4 +178,4 @@ module Lightblue
       end
     end
   end
-end
+=end

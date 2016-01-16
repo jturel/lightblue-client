@@ -1,4 +1,10 @@
 module Lightblue
+  module Expressions
+    class Projection < Lightblue::Expression
+    end
+  end
+end
+=begin
   class Projection
     class IncompatibleProjectionParameters < StandardError; end
     def initialize(field, entity)
@@ -118,4 +124,4 @@ module Lightblue
       end
     end
   end
-end
+=end

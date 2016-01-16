@@ -1,17 +1,27 @@
 module Lightblue
-  # Entry point to the primary DSL
-  #
-  # Query Constructors accept either an instance of {Expression}, or a
-  # block which will be executed in the scope of the Manager class (Find, Sort, Project) being called.
-  #
-  # In General, you should use a block to construct a new expression. Then, once the expression has been generated,
-  # you can use it to compose other queries.
-  #
-  # @example
-  #   Query.new(:foo).find { field[:bar].eq(:batz) }
-
+  # The Query class is the primary entry point to the DSL. It exposes builder methods corresponding to each Data API endpoint, which delegate to a
+  # delegate to a Lightblue::Manager subclass, which is responsible for generating and composing expressionsn.
+  # @see Lightblue::Manager
   class Query
-    attr_reader :find_manager, :projection_manager, :entity
+    def find(entity, expression, &blk)
+    end
+
+    def update(entity, expression, &blk)
+    end
+
+    def insert(entity, expression, &blk)
+    end
+
+    def delete(entity, expression, &blk)
+    end
+
+    def save(entity, expression, &blk)
+    end
+  end
+end
+=begin
+
+    attr_reader :find_manager, :projection_manager
     def initialize(entity)
       @entity = entity
       @find_manager = Lightblue::FindManager.new(@entity)
@@ -88,3 +98,4 @@ module Lightblue
     end
   end
 end
+=end

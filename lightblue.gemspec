@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'ast', '~> 2.2.0'
 
   spec.add_development_dependency 'coveralls'
+  spec.add_development_dependency 'redcarpet'
   spec.add_development_dependency 'minitest', '~> 5.4'
   spec.add_development_dependency 'minitest-reporters'
   spec.add_development_dependency 'pry'
