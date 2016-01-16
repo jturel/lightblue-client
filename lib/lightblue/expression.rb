@@ -1,7 +1,3 @@
-require 'lightblue/expressions/search.rb'
-require 'lightblue/expressions/update.rb'
-require 'lightblue/expressions/sort.rb'
-require 'lightblue/expressions/projection.rb'
 module Lightblue
   # The Expression class wraps and manipulates the AST for each expression type specified by Lightblue. It is the only class that should
   # operate directly on the AST.
@@ -18,22 +14,45 @@ module Lightblue
   #
   # @abstract
   class Expression
+    # @param [AST::Node] ast
     def initialize(ast = ast_root)
       @ast = ast
     end
 
+    protected
+
     # @abstract
+    # @return [AST::Node]
+    def self.ast_root
+    end
+
     def ast_root
+      self.class.ast_root
     end
 
     private
+    def ast
+      @ast
+    end
+    # !@group helpers
+    # @param [Symbol] type
+    # @param [Array] children
+    def self.new_node(type, children)
+      Lightblue::AST::Node.new(type, children)
+    end
 
-    # The private methods are simply helpers for dealing with the AST.
     def new_node(type, children)
       Lightblue::AST::Node.new(type, children)
     end
+    # !@endgroup
   end
 end
+require 'lightblue/expressions/operators'
+require 'lightblue/expressions/search'
+require 'lightblue/expressions/update'
+require 'lightblue/expressions/sort'
+require 'lightblue/expressions/projection'
+
 =begin
   class Expression
 
