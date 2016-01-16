@@ -17,9 +17,16 @@ module Lightblue
     # @param [AST::Node] ast
     def initialize(ast = ast_root)
       @ast = ast
+      freeze
     end
 
     protected
+
+    def ast
+      @ast
+    end
+
+    private
 
     # @abstract
     # @return [AST::Node]
@@ -30,11 +37,7 @@ module Lightblue
       self.class.ast_root
     end
 
-    private
-    def ast
-      @ast
-    end
-    # !@group helpers
+   # !@group helpers
     # @param [Symbol] type
     # @param [Array] children
     def self.new_node(type, children)
@@ -45,6 +48,22 @@ module Lightblue
       Lightblue::AST::Node.new(type, children)
     end
     # !@endgroup
+
+    def literal_to_node(literal)
+      case literal
+      when Fixnum then new_node(:value, [literal])
+      when String then new_node(:value, [literal])
+      when Symbol then new_node(:value, [literal])
+      end
+    end
+
+    def literal_to_expression(literal)
+      klass.new(literal_to_node(literal))
+    end
+
+    def klass
+      self.class
+    end
   end
 end
 require 'lightblue/expressions/operators'
@@ -136,7 +155,7 @@ require 'lightblue/expressions/projection'
       @ast = @ast.concat(
         [Lightblue::AST::Node.new(:binary_comparison_operator, [token]),
          evaluate_binary_rhs(expr)])
-      resolve
+      resolvke
       self
     end
 

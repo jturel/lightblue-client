@@ -9,6 +9,14 @@ module AstHelper
     klass.send(:extend, self)
   end
 
+  def value_node(value)
+    new_node(:value, [value])
+  end
+
+  def new_node(type, children)
+    Lightblue::AST::Node.new(type, children)
+  end
+
   def assert_ast_equal(exp, act, msg = nil)
     msg = msg ? "#{msg}\n\n" : "\n"
     diff = AstHelper.pretty_diff(exp, act)
@@ -43,7 +51,6 @@ module AstHelper
     let(:binary_op_node) { s(:binary_comparison_operator, :!=) }
     let(:nary_op_node) { s(:nary_comparison_operator, :$in) }
     let(:array_contains_op_node) { s(:array_contains_operator, :$none) }
-    let(:value_node) { s(:value, 1) }
     let(:values_node) { s(:value_list_array, [1, 2, 3]) }
     let(:sym_values_node) { s(:value_list_array, [:foo, :bar]) }
     let(:pattern_node) { s(:pattern, /foo/) }
