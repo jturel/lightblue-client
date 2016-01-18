@@ -15,6 +15,7 @@ module Lightblue
         class MissingChild < StandardError; end
         class TerminalTypeMismatch < StandardError; end
         class InvalidRange < StandardError; end
+        class UnresolveableExpression < StandardError; end
 
         def on_operator(node)
           tokens = Tokens::OPERATORS[node.type]
@@ -33,7 +34,7 @@ module Lightblue
           tokens = Tokens::UNIONS[node.type]
           child, tail = *node
           fail MissingChild, "#{node.type} passed with no children" unless child
-          fail TooManyChildren if tail
+          fail UnresolveableExpression if tail
           unless tokens.include?(child.type)
             fail InvalidSubexpression,
                  "Invalid subexpression #{child.type} for #{node.type}_expression. \
@@ -128,6 +129,7 @@ module Lightblue
           children, = *node
           case children
           when Array
+            fail TerminalTypeMismatch unless children.all? { |child| child.is_a?(Synbol) || child.is_a?(String) }
           else
             fail TerminalTypeMismatch, "Expected an Array of Values, got #{node.children}"
           end

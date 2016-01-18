@@ -7,6 +7,14 @@ require 'lightblue/ast/visitors/hash_visitor'
 require 'lightblue/ast/visitors/validation_visitor'
 module Lightblue
   module AST
+    def self.unfold(ast)
+      Lightblue::AST::Visitors::UnfoldVisitor.new.process(ast)
+    end
+
+    def self.valid?(ast)
+      Lightblue::AST::Visitors::ValidationVisitor.new.process(unfold(ast))
+    end
+ 
     class Node < ::AST::Node
       include Enumerable
       def each
@@ -16,7 +24,8 @@ module Lightblue
       def terminal?
         Lightblue::AST::Tokens::TERMINALS.include?(type)
       end
-    end
+
+   end
 
     module Sexp
       def s(type, *children)

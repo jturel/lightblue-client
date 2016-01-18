@@ -1,10 +1,10 @@
 module Lightblue
   module Expressions
     class Search < Lightblue::Expression
-
       include Operators::BinaryComparison
+      include Operators::NaryComparison
       # @param [Symbol, String] name
-      # @return [Expression::SearchExpression]
+      # @return [Expression::FieldExpression]
       def field(name)
         Search.new ast.concat([Lightblue::AST::Node.new(:field, [name])])
       end
@@ -14,26 +14,38 @@ module Lightblue
       private
       # @param [Symbol] token
       # @param [Search, Symbol, Integer, String] expression
-      # @raises [BadParamOrdering] 
+      # @raises [BadParamOrdering]
       # @return [Search]
       def binary_comparison_operator(token, expression)
-        raise Operators::BadParamOrdering, 'Bad Error Message' unless first_param_is_field?
+        fail Operators::BadParamOrdering, 'Bad Error Message' unless first_param_is_field?
         expression = case expression
                      when Expression then expression.ast
                      else literal_to_node(expression)
                      end
-        new_ast = ast.concat([new_node(:op, [token]), expression])
-        self.class.new(new_ast)
+        new_ast = ast.concat([new_node(:binary_comparison_operator, [token]), expression])
+        klass.new(new_ast)
       end
 
-      # @return [Boolean] 
+      # @param [Symbol] token
+      # @param [Field, Array<Symbol, String>] expression
+      # @raises [BadParamOrdering]
+      # @return [Search]
+      def nary_comparison_operator(token, expression)
+        fail Operators::BadParamOrdering, 'Bad Error Message' unless first_param_is_field?
+        expression = case expression
+                     when Expression then expression.ast
+                     else literal_to_node(expression)
+                     end
+        new_ast = ast.concat([new_node(:nary_comparison_operator, [token]), expression])
+        #`Lightblue::AST.valid? new_ast
+        klass.new(new_ast)
+      end
+
+      # @return [Boolean]
       def first_param_is_field?
         child, = *ast
         return false if child.nil?
-        case child.type
-        when :field then true
-        else false
-        end
+        child.type == :field
       end
 
       def self.ast_root
