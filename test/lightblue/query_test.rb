@@ -8,7 +8,7 @@ describe 'queryin\'' do
   describe 'a single expression' do
     it 'should render the correct hash' do
       expected = { op: :$eq, field: :bar, rvalue: :foo }
-      find = entity.find { f[:bar].eq(:foo) }
+      find = entity.find { field[:bar].eq(:foo) }
       assert_equal find.to_hash, expected
     end
   end
@@ -25,8 +25,9 @@ describe 'queryin\'' do
 
       find =
         entity.find do
-          field['bar'].eq('foo')
-          .and(field[:baz].eq(field[:gorp]))
+          field['bar']
+            .eq('foo')
+            .and(field[:baz].eq(field[:gorp]))
         end
 
       assert_equal find.to_hash, expected
@@ -78,8 +79,8 @@ describe 'queryin\'' do
       query =
         Lightblue::Query.new(entity).project do
           field(:foo)
-          .range(1, 2)
-          .project { !field(:bar) }
+            .range(1, 2)
+            .project { field(:bar).include(false) }
         end
 
       query.find { field[:bar].eq(:foo) }
@@ -128,8 +129,8 @@ describe 'queryin\'' do
 
       query = Lightblue::Query.new(entity).find do
         field[:bar]
-        .eq(:foo)
-        .all(field[:baz]
+          .eq(:foo)
+          .all(field[:baz]
              .eq(field[:gorp])
              .or(field[:scrim].eq(:scram)))
       end

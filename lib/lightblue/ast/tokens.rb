@@ -8,7 +8,7 @@ module Lightblue
         nary_comparison_operator: [:$in, :$not_in, :$nin],
         binary_comparison_operator: [:"=", :!=, :<, :>, :<=, :>=, :$eq, :$neq, :$lt, :$gt, :$lte, :$gte],
         array_contains_operator: [:$any, :$all, :$none]
-      }
+      }.freeze
 
       UNIONS = {
         # Queries
@@ -35,7 +35,7 @@ module Lightblue
         maybe_boolean: [:boolean, :empty],
         maybe_projection: [:project, :empty],
         maybe_sort: [:sort, :empty]
-      }
+      }.freeze
 
       REVERSE_UNIONS = UNIONS.inject({}) do |acc, (k, v)|
         v.each { |i| acc[i] = k }
@@ -125,7 +125,7 @@ module Lightblue
             { sort: :maybe_sort }
           ]
 
-        }
+        }.freeze
 
       ATOMS = [
         :value_list_array,
@@ -137,9 +137,9 @@ module Lightblue
         :array_field,
         :value,
         :empty
-      ]
+      ].freeze
 
-      TERMINALS = ATOMS.concat(OPERATORS.keys)
+      TERMINALS = ATOMS.dup.concat(OPERATORS.keys)
     end
   end
 end

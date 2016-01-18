@@ -19,7 +19,6 @@ module Lightblue
     def field
       Lightblue::Expression.new
     end
-    alias_method :f, :field
 
     def ast
       @expression.ast

@@ -5,7 +5,7 @@ require 'lightblue/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'lightblue'
-  spec.version       = Lightblue::VERSION
+  spec.version       = Lightblue::VERSION.dup
   spec.authors       = ['Jonathon Turel', 'Davis Wahl']
   spec.summary       = 'Ruby client for the lightblue platform'
   spec.homepage      = ''
