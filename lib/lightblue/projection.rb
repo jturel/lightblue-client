@@ -25,7 +25,7 @@ module Lightblue
       if @projection_type == :array_match_projection
         fail IncompatibleProjectionParameters, 'Attempted to set range param  on a match projection'
       end
-      @include = @include ||= true
+      @include = true if @include.nil?
 
       @projection_type = :array_range_projection
       @range = [first, last]
