@@ -21,15 +21,6 @@ module Lightblue
       self
     end
 
-    def !
-      if @include.nil?
-        @include = false
-      else
-        @include = !@include
-      end
-      self
-    end
-
     def range(first, last)
       if @projection_type == :array_match_projection
         fail IncompatibleProjectionParameters, 'Attempted to set range param  on a match projection'

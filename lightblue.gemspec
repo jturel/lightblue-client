@@ -5,7 +5,7 @@ require 'lightblue/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'lightblue'
-  spec.version       = Lightblue::VERSION
+  spec.version       = Lightblue::VERSION.dup
   spec.authors       = ['Jonathon Turel', 'Davis Wahl']
   spec.summary       = 'Ruby client for the lightblue platform'
   spec.homepage      = ''
@@ -16,8 +16,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'faraday', '~> 0.9.1'
-  spec.add_runtime_dependency 'json-schema'
-  spec.add_runtime_dependency 'diffy'
+  spec.add_runtime_dependency 'json-schema', '~> 2.5.2'
+  spec.add_runtime_dependency 'diffy', '~> 3.1.0'
+  spec.add_runtime_dependency 'ast', '~> 2.2.0'
 
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'minitest', '~> 5.4'

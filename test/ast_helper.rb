@@ -28,7 +28,7 @@ module AstHelper
     diff = Diffy::SplitDiff.new(l, r, format: :color)
     width = [diff.left, diff.right].map { |x| x.split("\n").max_by(&:size).to_s.size }.max
     str = ''
-    ([diff.left.lines.count, diff.right.lines.count].max).times do |i|
+    [diff.left.lines.count, diff.right.lines.count].max.times do |i|
       l = diff.left.lines.to_a[i].to_s.delete("\n")
       r = diff.right.lines.to_a[i].to_s.delete("\n")
       w = ' ' * (width - l.size + 10)
