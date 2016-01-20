@@ -11,7 +11,7 @@ module Lightblue
   #   Query.new(:foo).find { field[:bar].eq(:batz) }
 
   class Query
-    attr_reader :find_manager, :projection_manager
+    attr_reader :find_manager, :projection_manager, :entity
     def initialize(entity)
       @entity = entity
       @find_manager = Lightblue::FindManager.new(@entity)
@@ -41,32 +41,23 @@ module Lightblue
     def execution
     end
 
-    def to_ast
-      find = validate(unfold(@find_manager.ast))
-      projections = validate(unfold(@projection_manager.ast))
-
-      AST::Node.new(:request,
-                    [
-                      AST::Node.new(:object_type, [@entity.name]),
-                      AST::Node.new(:request_query, [find]),
-                      AST::Node.new(:request_projection, [projections])
-                      # TODO
-                      # AST::Node.new(:maybe_object_version, [@entity.version]),
-                      # AST::Node.new(:client, [@client]),
-                      # AST::Node.new(:execution, [@execution]),
-                      # AST::Node.new(:sort, [@sort]),
-                    ])
-    end
-
     def to_hash
-      ast_to_hash(to_ast)
+      { entity: @entity.name, entityVersion: @entity.version, query: find_hash, projection: [projection_hash].flatten }.delete_if { |_, v| v.nil? }
     end
 
     private
 
     def projection_hash
-      h, = *ast_to_hash(validate(unfold(find_ast)))
-      h
+      if projection_ast
+        p = ast_to_hash(validate(unfold(projection_ast)))
+        if p.type == :basic_projection_array
+          p.children.map{|x| x.children}.flatten
+        else
+          p.children
+        end
+      else
+        nil
+      end
     end
 
     def projection_ast
@@ -78,8 +69,12 @@ module Lightblue
     end
 
     def find_hash
-      h, = *ast_to_hash(validate(unfold(find_ast)))
-      h
+      if find_ast
+        h, = *ast_to_hash(validate(unfold(find_ast)))
+        h
+      else
+        nil
+      end
     end
 
     def ast_to_hash(ast)

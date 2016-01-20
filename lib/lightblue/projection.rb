@@ -112,12 +112,11 @@ module Lightblue
 
     def ast
       if @projections.count > 1
-        AST::Node.new(:projection,
-                      [AST::Node.new(:basic_projection_array, @projections.map(&:ast))])
+        AST::Node.new(:basic_projection_array, @projections.map(&:ast))
       elsif @projections.count == 1
         @projections.first.ast
       else
-        []
+        nil
       end
     end
   end
