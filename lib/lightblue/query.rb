@@ -42,7 +42,11 @@ module Lightblue
     end
 
     def to_hash
-      { entity: @entity.name, entityVersion: @entity.version, query: find_hash, projection: [projection_hash].flatten }.delete_if { |_, v| v.nil? }
+      { entity: @entity.name,
+        entityVersion: @entity.version,
+        query: find_hash,
+        projection: [projection_hash].flatten
+      }.delete_if { |_, v| v.nil? }
     end
 
     private
@@ -51,12 +55,10 @@ module Lightblue
       if projection_ast
         p = ast_to_hash(validate(unfold(projection_ast)))
         if p.type == :basic_projection_array
-          p.children.map{|x| x.children}.flatten
+          p.children.map(&:children).flatten
         else
           p.children
         end
-      else
-        nil
       end
     end
 
@@ -69,12 +71,8 @@ module Lightblue
     end
 
     def find_hash
-      if find_ast
-        h, = *ast_to_hash(validate(unfold(find_ast)))
-        h
-      else
-        nil
-      end
+      h, = *ast_to_hash(validate(unfold(find_ast))) if find_ast
+      h
     end
 
     def ast_to_hash(ast)

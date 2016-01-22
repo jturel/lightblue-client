@@ -68,7 +68,7 @@ module Lightblue
 
         def on_object_type(node)
           v, = *node
-          node.updated(nil, [{ objectType: v }])
+          node.updated(nil, [{ entity: v }])
         end
       end
     end
