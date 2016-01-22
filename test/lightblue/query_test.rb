@@ -90,21 +90,22 @@ describe 'queryin\'' do
         query: {
           field: :bar, op: :$eq, rvalue: :foo
         },
-        projection: {
+        projection: [{
           field: :foo,
           include: true,
           range: [1, 2],
           project: {
             field: :bar, include: false
           }
-        }
+        }]
       }
       assert_equal expected, query.to_hash
     end
 
     it 'should render the correct hash' do
       expected =
-        { entity: :foo,
+        {
+          entity: :foo,
           query:
             { :$all =>
               [
@@ -117,14 +118,14 @@ describe 'queryin\'' do
                 }
               ]
             },
-          projection: {
+          projection: [{
             field: :bar,
             include: true,
             match: {
               field: :flim,
               op: :$eq,
               rvalue: :flam }
-          }
+          }]
         }
 
       query = Lightblue::Query.new(entity).find do

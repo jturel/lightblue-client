@@ -21,7 +21,7 @@ module Lightblue
     end
 
     def ast
-      @expression.ast
+      @expression.ast if @expression
     end
 
     def unary_logical_operator(token, expr = nil, &blk)
