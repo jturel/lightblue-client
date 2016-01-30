@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'spec_helper'
 require './lib/lightblue/ast'
 # rubocop:disable Metrics/AbcSize
 # rubocop:disable Metrics/MethodLength

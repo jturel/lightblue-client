@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'spec_helper'
 require 'ast_helper'
 describe 'Search Test' do
   include AstHelper
@@ -54,8 +54,8 @@ describe 'Search Test' do
     end
   end
 
-    describe 'nary comparison operators' do
-      let(:field_exp){ search.new[:bar] }
+  describe 'nary comparison operators' do
+    let(:field_exp) { search.new[:bar] }
 
     it 'raise an error if called on an expression that does not have a field in /0' do
       skip
@@ -77,7 +77,7 @@ describe 'Search Test' do
     end
 
     it 'accepts a string' do
-      expected = new_node(:query_expression, [new_node(:field, [:bar]) ,
+      expected = new_node(:query_expression, [new_node(:field, [:bar]),
                                               new_node(:nary_comparison_operator, [:$nin]),
                                               new_node(:field, ['foo'])])
       actual = field_exp.nin(search.new['foo']).send(:ast)

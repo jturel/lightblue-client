@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'spec_helper'
 describe 'validation visitor' do
   include AstHelper
   use_ast_node_helpers

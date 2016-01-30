@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'spec_helper'
 require 'ast_helper'
 include AstHelper
 describe 'queryin\'' do

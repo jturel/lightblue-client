@@ -1,5 +1,5 @@
 
-require 'test_helper'
+require 'spec_helper'
 include AstHelper
 describe 'projections' do
   let(:entity) { Lightblue::Entity.new(:foo) }

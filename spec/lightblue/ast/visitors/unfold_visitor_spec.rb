@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'spec_helper'
 
 describe 'Lightblue::AST::Visitors::UnfoldVisitor' do
   include AstHelper
