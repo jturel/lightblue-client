@@ -17,12 +17,6 @@ module AstHelper
     Lightblue::AST::Node.new(type, children)
   end
 
-  def assert_ast_equal(exp, act, msg = nil)
-    msg = msg ? "#{msg}\n\n" : "\n"
-    diff = AstHelper.pretty_diff(exp, act)
-    expect(exp).to eq(act)
-  end
-
   def assert_ast_produces_hash(exp, ast)
     expanded = Lightblue::AST::Visitors::UnfoldVisitor.new.process(ast)
     act = Lightblue::AST::Visitors::HashVisitor.new.process(expanded)

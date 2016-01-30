@@ -111,7 +111,7 @@ specified by Lightblue. It is the only class that should operate directly
 on the AST.</p>
 
 <p>There is one expression subclass for each of the primary expressions
-specified by Lightblue: Search, Projection, Sort, and Update.</p>
+specified by Lightblue: Query, Projection, Sort, and Update.</p>
 
 <p>Expressions are meant to be used in two ways:</p>
 
@@ -132,8 +132,20 @@ with the tranformed AST.</p>
 
 </div><div id="subclasses">
   <h2>Direct Known Subclasses</h2>
-  <p class="children"><span class='object_link'><a href="Expressions/Projection.html" title="Lightblue::Expressions::Projection (class)">Lightblue::Expressions::Projection</a></span>, <span class='object_link'><a href="Expressions/Search.html" title="Lightblue::Expressions::Search (class)">Lightblue::Expressions::Search</a></span>, <span class='object_link'><a href="Expressions/Sort.html" title="Lightblue::Expressions::Sort (class)">Lightblue::Expressions::Sort</a></span>, <span class='object_link'><a href="Expressions/Update.html" title="Lightblue::Expressions::Update (class)">Lightblue::Expressions::Update</a></span></p>
+  <p class="children"><span class='object_link'><a href="Expressions/Field.html" title="Lightblue::Expressions::Field (class)">Lightblue::Expressions::Field</a></span>, <span class='object_link'><a href="Expressions/Projection.html" title="Lightblue::Expressions::Projection (class)">Lightblue::Expressions::Projection</a></span>, <span class='object_link'><a href="Expressions/Query.html" title="Lightblue::Expressions::Query (class)">Lightblue::Expressions::Query</a></span>, <span class='object_link'><a href="Expressions/Sort.html" title="Lightblue::Expressions::Sort (class)">Lightblue::Expressions::Sort</a></span>, <span class='object_link'><a href="Expressions/Unbound.html" title="Lightblue::Expressions::Unbound (class)">Lightblue::Expressions::Unbound</a></span>, <span class='object_link'><a href="Expressions/Update.html" title="Lightblue::Expressions::Update (class)">Lightblue::Expressions::Update</a></span></p>
 </div>
+
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="Errors-constant" class="">Errors =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Expressions</span><span class='op'>::</span><span class='const'>Errors</span></pre></dd>
+      
+    </dl>
+  
 
 
 
@@ -152,7 +164,7 @@ with the tranformed AST.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Expression) <strong>initialize</strong>(ast = ast_root) </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Expression) <strong>initialize</strong>(ast) </a>
     
 
     
@@ -175,6 +187,30 @@ with the tranformed AST.</p>
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#klass-instance_method" title="#klass (instance method)">- (Object) <strong>klass</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>!@endgroup.</p>
+</div></span>
+  
+</li>
+
+      
     </ul>
   
 
@@ -184,7 +220,7 @@ with the tranformed AST.</p>
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    - (<tt><span class='object_link'><a href="" title="Lightblue::Expression (class)">Expression</a></span></tt>) <strong>initialize</strong>(ast = ast_root) 
+    - (<tt><span class='object_link'><a href="" title="Lightblue::Expression (class)">Expression</a></span></tt>) <strong>initialize</strong>(ast) 
   
 
   
@@ -199,24 +235,7 @@ with the tranformed AST.</p>
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>ast</span>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="AST/Node.html" title="Lightblue::AST::Node (class)">AST::Node</a></span></tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>ast_root</tt>)</em>
-      
-      
-    </li>
-  
-</ul>
-
 
 </div><table class="source_code">
   <tr>
@@ -224,15 +243,15 @@ with the tranformed AST.</p>
       <pre class="lines">
 
 
-18
-19
-20
-21</pre>
+21
+22
+23
+24</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/lightblue/expression.rb', line 18</span>
+      <pre class="code"><span class="info file"># File 'lib/lightblue/expression.rb', line 21</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_ast'>ast</span> <span class='op'>=</span> <span class='id identifier rubyid_ast_root'>ast_root</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_ast'>ast</span><span class='rparen'>)</span>
   <span class='ivar'>@ast</span> <span class='op'>=</span> <span class='id identifier rubyid_ast'>ast</span>
   <span class='id identifier rubyid_freeze'>freeze</span>
 <span class='kw'>end</span></pre>
@@ -244,12 +263,59 @@ with the tranformed AST.</p>
 </div>
 
 
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="klass-instance_method">
+  
+    - (<tt>Object</tt>) <strong>klass</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>!@endgroup</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+62
+63
+64</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/lightblue/expression.rb', line 62</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_klass'>klass</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
 </div>
 
     <div id="footer">
-  Generated on Fri Jan 29 22:56:42 2016 by
+  Generated on Sat Jan 30 12:40:55 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-1.9.3).
+  0.8.7.6 (ruby-2.1.0).
 </div>
 
   </body>

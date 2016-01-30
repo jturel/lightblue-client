@@ -31,7 +31,6 @@ module Lightblue
 
       # @TODO extract regex options
       def build_regexp_node(regexp, regex_options = {})
-
         parameters = AST::Tokens::EXPRESSIONS[:regex_match_expression][2..-1].map(&:keys).flatten
         options = parameters.map { |key| new_node(:maybe_boolean, [regex_options[key]]) }
 

@@ -6,6 +6,5 @@ module Lightblue
   # here[https://jewzaam.gitbooks.io/lightblue-specifications/content/language_specification/data.html]
   # @abstract
   class Manager
-
   end
 end

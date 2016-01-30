@@ -114,7 +114,7 @@ describe Lightblue::Expressions::Field do
                                                       new_node(:maybe_boolean, [nil]),
                                                       new_node(:maybe_boolean, [nil]),
                                                       new_node(:maybe_boolean, [nil])])
- 
+
         actual = Field.new(:bar).match('foo')
         expect(actual).to match_ast(expected)
       end
