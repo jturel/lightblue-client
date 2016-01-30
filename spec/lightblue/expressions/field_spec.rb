@@ -83,9 +83,65 @@ describe Lightblue::Expressions::Field do
       it 'generates an array_contains_expression' do
         expected = new_node(:array_contains_expression, [new_node(:field, [:bar]),
                                                          new_node(:array_contains_operator, [:$all]),
-                                                         new_node(:value_list_array, [%w('foo', 'batz')])])
+                                                         new_node(:value_list_array, [%w(foo batz)])])
 
-        actual = Field.new(:bar).all(%w('foo', 'batz'))
+        actual = Field.new(:bar).all(%w(foo batz))
+        expect(actual).to match_ast(expected)
+      end
+    end
+  end
+
+  describe '#match' do
+    context 'when called with a query' do
+      it 'generates an array_match_expression' do
+        expected = new_node(:array_match_expression,
+                            [new_node(:field, [:bar]),
+                             new_node(:value_comparison_expression,
+                                      [new_node(:field, [:bar]),
+                                       new_node(:binary_comparison_operator, [:$eq]),
+                                       new_node(:value, [:foo])])])
+
+        actual = Field.new(:bar).match(Field.new(:bar).eq(:foo))
+        expect(actual).to match_ast(expected)
+      end
+    end
+
+    context 'when called with a string' do
+      it 'generates a regex_match_expression' do
+        expected = new_node(:regex_match_expression, [new_node(:field, [:bar]),
+                                                      new_node(:pattern, ['foo']),
+                                                      new_node(:maybe_boolean, [nil]),
+                                                      new_node(:maybe_boolean, [nil]),
+                                                      new_node(:maybe_boolean, [nil]),
+                                                      new_node(:maybe_boolean, [nil])])
+ 
+        actual = Field.new(:bar).match('foo')
+        expect(actual).to match_ast(expected)
+      end
+
+      context 'with options' do
+        it 'generates a regex_match_expression with options' do
+          expected = new_node(:regex_match_expression, [new_node(:field, [:bar]),
+                                                        new_node(:pattern, ['foo']),
+                                                        new_node(:maybe_boolean, [nil]),
+                                                        new_node(:maybe_boolean, [nil]),
+                                                        new_node(:maybe_boolean, [true]),
+                                                        new_node(:maybe_boolean, [true])])
+          actual = Field.new(:bar).match('foo', dotall: true, caseInsensitive: true)
+          expect(actual).to match_ast(expected)
+        end
+      end
+    end
+
+    context 'when called with a regexp' do
+      it 'generates a regex_match_expression' do
+        expected = new_node(:regex_match_expression, [new_node(:field, [:bar]),
+                                                      new_node(:pattern, [/foo/]),
+                                                      new_node(:maybe_boolean, [nil]),
+                                                      new_node(:maybe_boolean, [nil]),
+                                                      new_node(:maybe_boolean, [nil]),
+                                                      new_node(:maybe_boolean, [nil])])
+        actual = Field.new(:bar).match(/foo/)
         expect(actual).to match_ast(expected)
       end
     end
