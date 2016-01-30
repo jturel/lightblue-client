@@ -16,22 +16,18 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'faraday', '~> 0.9.1'
-  spec.add_runtime_dependency 'json-schema', '~> 2.5.2'
-  spec.add_runtime_dependency 'diffy', '~> 3.1.0'
   spec.add_runtime_dependency 'ast', '~> 2.2.0'
 
   spec.add_development_dependency 'coveralls'
-  spec.add_development_dependency 'ripl'
-  spec.add_development_dependency 'ripl-multi_line'
+  spec.add_development_dependency 'diffy', '~> 3.1.0'
   spec.add_development_dependency 'redcarpet'
   spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'minitest-reporters'
   spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'pry-doc'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'guard'
   spec.add_development_dependency 'guard-yard'
   spec.add_development_dependency 'guard-rspec'
+  spec.add_development_dependency 'launchy'
   spec.add_development_dependency 'guard-rubocop'
 end

@@ -64,6 +64,7 @@ module Lightblue
     end
   end
 end
+require 'lightblue/expressions/unbound'
 require 'lightblue/expressions/field'
 require 'lightblue/expressions/query'
 require 'lightblue/expressions/update'

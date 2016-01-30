@@ -33,7 +33,7 @@ module AstHelper
   def self.pretty_diff(l, r)
     l = "Expected:\n" + l.to_sexp + "\n"
     r = "Actual:\n" + r.to_sexp + "\n"
-    diff = Diffy::SplitDiff.new(l, r, format: :color)
+    diff = Diffy::SplitDiff.new(l, r)
     width = [diff.left, diff.right].map { |x| x.split("\n").max_by(&:size).to_s.size }.max
     str = ''
     [diff.left.lines.count, diff.right.lines.count].max.times do |i|
