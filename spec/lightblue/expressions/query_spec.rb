@@ -2,7 +2,10 @@ require 'spec_helper'
 require 'ast_helper'
 describe Lightblue::Expressions::Query do
   Query = Lightblue::Expressions::Query
+
   include AstHelper
+  use_ast_node_helpers
+  let(:bad_param_error) { Lightblue::Expressions::Errors::BadParamForOperator }
 
   describe '#field' do
     context 'when called with a value' do
@@ -12,6 +15,7 @@ describe Lightblue::Expressions::Query do
         assert_ast_equal expected, actual, "Expected #{expected}, got #{actual}"
       end
     end
+
     context 'when called with a field' do
       it 'appends to field node to the root ast' do
         expected = new_node(:query_expression, [new_node(:field, [:foo])])
@@ -24,7 +28,7 @@ describe Lightblue::Expressions::Query do
   describe 'binary_operators' do
     let(:field_exp) { Query.new.field(:bar) }
 
-    it 'accepts a integer' do
+    it 'accepts an integer' do
       expected = new_node(:query_expression, [new_node(:field, [:bar]),
                                               new_node(:binary_comparison_operator, [:$eq]),
                                               value_node(10)])
@@ -59,7 +63,6 @@ describe Lightblue::Expressions::Query do
 
   describe 'nary comparison operators' do
     let(:field_exp) { Query.new.field(:bar) }
-    let(:bad_param_error) { Lightblue::Expressions::Errors::BadParamForOperator }
 
     context 'when called with a Field' do
       it 'generates a field node' do
@@ -91,6 +94,48 @@ describe Lightblue::Expressions::Query do
 
     context 'when called with a symbol' do
       it('raises BadParamForOperator') { expect { field_exp.in(:s) }.to raise_error(bad_param_error) }
+    end
+  end
+
+  describe 'nary logical operators' do
+    let(:query) { Query.new(query_exp_node) }
+    context 'when called with an array of literals' do
+      it('raises BadParamForOperator') { expect { Query.new.all([:f, :s]) }.to raise_error(bad_param_error) }
+    end
+
+    context 'when called with an expression' do
+      it('raises BadParamForOperator') { expect { Query.new.all(query) }.to raise_error(bad_param_error) }
+    end
+
+    context 'when called with an array of expressions' do
+      it 'generates a nary_logical_expression' do
+        expected = new_node(:nary_logical_expression,
+                            [new_node(:nary_logical_operator, [:$all]),
+                             new_node(:query_array, [query_exp_node, query_exp_node])])
+        actual = Query.new.all([query, query]).send(:ast)
+        expect(actual).to match_ast(expected)
+      end
+    end
+  end
+
+  describe 'unary logical operators' do
+    let(:query) { Query.new(query_exp_node) }
+    context 'when called with an array' do
+      it('raises BadParamForOperator') { expect { Query.new.not([:f, :s]) }.to raise_error(bad_param_error) }
+    end
+
+    context 'when called with a literal' do
+      it('raises BadParamForOperator') { expect { Query.new.all(1) }.to raise_error(bad_param_error) }
+    end
+
+    context 'when called with an expression' do
+      it 'generates a unary_logical_expression' do
+        expected = new_node(:unary_logical_expression,
+                            [new_node(:unary_logical_operator, [:$not]),
+                             query_exp_node])
+        actual = Query.new.not(query).send(:ast)
+        expect(actual).to match_ast(expected)
+      end
     end
   end
 end
