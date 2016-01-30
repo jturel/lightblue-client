@@ -14,7 +14,7 @@ module Lightblue
       private
       # @param [Symbol] token
       # @param [Search, Symbol, Integer, String] expression
-      # @raises [BadParamOrdering]
+      # @raise [BadParamOrdering]
       # @return [Search]
       def binary_comparison_operator(token, expression)
         fail Operators::BadParamOrdering, 'Bad Error Message' unless first_param_is_field?
@@ -28,7 +28,7 @@ module Lightblue
 
       # @param [Symbol] token
       # @param [Field, Array<Symbol, String>] expression
-      # @raises [BadParamOrdering]
+      # @raise [BadParamOrdering]
       # @return [Search]
       def nary_comparison_operator(token, expression)
         fail Operators::BadParamOrdering, 'Bad Error Message' unless first_param_is_field?

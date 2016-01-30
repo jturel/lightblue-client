@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.8.7.6
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!file.README.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'><p><a href="https://travis-ci.org/jturel/lightblue-client"><img src="https://travis-ci.org/jturel/lightblue-client.svg?branch=master" alt="Build Status"></a></p>
+
+<h1>Lightblue::Client</h1>
+
+<h2>Arel like queries</h2>
+
+<pre class="code ruby"><code class="ruby">foo = Lightblue::Entity.new(:foo)
+foo.find{ field[:baz].eq(10) }.to_hash
+=&gt; {:op=&gt;&quot;$eq&quot;, :field=&gt;:baz, :rvalue=&gt;10}
+
+query =
+  entity.find do
+  field[:bar]
+    .eq(:foo)
+    .all(field[:baz]
+          .eq(field[:gorp])
+          .or(field[:scrim].eq(:scram)))
+end.project do
+  field(:bar).match(entity.find { field[:flim].eq(:flam) })
+end
+
+
+query.to_hash
+=&gt;
+{ entity: :foo,
+  query:
+    { :$all =&gt;
+      [
+        { op:  :$eq, field:  :bar, rvalue:  :foo },
+        { :$or =&gt;
+               [
+                 { op:  :$eq, field:  :baz, rfield:  :gorp },
+                 { op:  :$eq, field:  :scrim, rvalue:  :scram }
+               ]
+        }
+      ]
+  },
+  projection: {
+    field: :bar,
+    include: true,
+    match: {
+      field: :flim,
+      op: :$eq,
+      rvalue: :flam }
+  }
+}
+</code></pre>
+
+<p>Take a look at specs/lightblue/query_spec.rb for better examples
+<a href="https://github.com/daviswahl/lightblue-client/blob/master/spec/lightblue/query_spec.rb">https://github.com/daviswahl/lightblue-client/blob/master/spec/lightblue/query_spec.rb</a></p>
+
+<p>TODO:</p>
+
+<p>Add nodes for the rest of the tokens outlined in the spec: <a href="http://jewzaam.gitbooks.io/lightblue-specifications/content/language_specification/search_criteria.html">http://jewzaam.gitbooks.io/lightblue-specifications/content/language_specification/search_criteria.html</a></p>
+
+<p>Add update/create/delete</p>
+
+<p>See what can be done with metadata</p>
+
+<p>Entities are currently arbitrary. They could be linked to a schema, although I&#39;m not sure if it would benefit the AST.
+I don&#39;t fully understand how Lightblue does field comparisons (can you compare foo_entity[:field] to bar_entity[:field] ?). Need to experiment with this and consider some kind of join syntax.</p>
+</div></div>
+
+    <div id="footer">
+  Generated on Fri Jan 29 22:56:42 2016 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.6 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>
