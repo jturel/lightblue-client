@@ -2,7 +2,7 @@ module Lightblue
   # The Query class is the primary entry point to the DSL. It exposes builder methods corresponding to each Data API endpoint, which delegate to a
   # delegate to a Lightblue::Manager subclass, which is responsible for generating and composing expressionsn.
   # @see Lightblue::Manager
-  class Query
+  class Request
     def find(entity, expression, &blk)
     end
 

@@ -1,20 +1,19 @@
 module Lightblue
   module Expressions
     module Operators
-
-      class BadParamOrdering < StandardError; end 
+      class BadParamOrdering < StandardError; end
       module NaryLogical
+        # @abstract
         # @param [Symbol] token
         # @param [Expression] expression
         # @return [Expression]
         def nary_logical_operator(token, expression)
-
         end
         private :nary_logical_operator
 
         # @!macro op
         #   @param [Expression] expression
-        #   @return [Expression] 
+        #   @return [Expression]
         def and(expression)
           nary_logical_operator(:$and, expression)
         end
@@ -75,11 +74,11 @@ module Lightblue
       end
 
       module UnaryLogical
-       # @param [Symbol] token
-       # @param [Expression] expression
-       # @return [Expression]
-       def unary_logical_operator(token, expression)
-
+        # @abstract
+        # @param [Symbol] token
+        # @param [Expression] expression
+        # @return [Expression]
+        def unary_logical_operator(token, expression)
         end
         private :unary_logical_operator
 
@@ -90,11 +89,11 @@ module Lightblue
       end
 
       module NaryComparison
+        # @abstract
         # @param [Symbol] token
         # @param [Expression] expression
         # @return [Expression]
         def nary_comparison_operator(token, expression)
-
         end
         private :nary_comparison_operator
 
@@ -115,11 +114,11 @@ module Lightblue
       end
 
       module ArrayComparison
+        # @abstract
         # @param [Symbol] token
         # @param [Expression] expression
         # @return [Expression]
         def array_comparison_operator(token, expression)
-
         end
         private :array_comparison_operator
 

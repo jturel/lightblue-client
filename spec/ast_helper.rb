@@ -20,7 +20,7 @@ module AstHelper
   def assert_ast_equal(exp, act, msg = nil)
     msg = msg ? "#{msg}\n\n" : "\n"
     diff = AstHelper.pretty_diff(exp, act)
-    assert exp == act, "#{msg}#{diff}"
+    expect(exp).to eq(act)
   end
 
   def assert_ast_produces_hash(exp, ast)

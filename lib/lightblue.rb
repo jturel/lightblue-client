@@ -1,7 +1,7 @@
 require 'lightblue/ast'
 require 'lightblue/client'
 require 'lightblue/entity'
-require 'lightblue/query'
+require 'lightblue/request'
 require 'lightblue/expression'
 #require 'lightblue/projection'
 #require 'lightblue/find_manager'

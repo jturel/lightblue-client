@@ -1,8 +1,10 @@
+require 'lightblue/expressions/errors'
+require 'lightblue/expressions/operators'
 module Lightblue
   # The Expression class wraps and manipulates the AST for each expression type specified by Lightblue. It is the only class that should
   # operate directly on the AST.
   #
-  # There is one expression subclass for each of the primary expressions specified by Lightblue: Search, Projection, Sort, and Update.
+  # There is one expression subclass for each of the primary expressions specified by Lightblue: Query, Projection, Sort, and Update.
   #
   # Expressions are meant to be used in two ways:
   #   - Instantiated directly by the user, so they may be used and reused to compose a larger query or queries.
@@ -14,60 +16,56 @@ module Lightblue
   #
   # @abstract
   class Expression
-    # @param [AST::Node] ast
-    def initialize(ast = ast_root)
+    Errors = Expressions::Errors
+
+    def initialize(ast)
       @ast = ast
       freeze
     end
 
-    protected
-
     def ast
       @ast
     end
+    protected :ast
 
-    private
+    # !@group helpers
 
-    # @abstract
-    # @return [AST::Node]
-    def self.ast_root
-    end
-
-    def ast_root
-      self.class.ast_root
-    end
-
-   # !@group helpers
     # @param [Symbol] type
     # @param [Array] children
     def self.new_node(type, children)
-      Lightblue::AST::Node.new(type, children)
+      AST::Node.new(type, children)
     end
+    private_class_method :new_node
 
     def new_node(type, children)
-      Lightblue::AST::Node.new(type, children)
+      AST::Node.new(type, children)
     end
-    # !@endgroup
+    private :new_node
 
     def literal_to_node(literal)
       case literal
       when Fixnum then new_node(:value, [literal])
       when String then new_node(:value, [literal])
       when Symbol then new_node(:value, [literal])
+      when Array then new_node(:value_list_array, [literal])
       end
     end
+    private :literal_to_node
 
     def literal_to_expression(literal)
       klass.new(literal_to_node(literal))
     end
+    private :literal_to_expression
+
+    # !@endgroup
 
     def klass
       self.class
     end
   end
 end
-require 'lightblue/expressions/operators'
-require 'lightblue/expressions/search'
+require 'lightblue/expressions/field'
+require 'lightblue/expressions/query'
 require 'lightblue/expressions/update'
 require 'lightblue/expressions/sort'
 require 'lightblue/expressions/projection'
