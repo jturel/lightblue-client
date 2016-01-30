@@ -1,5 +1,4 @@
 require 'spec_helper'
-
 describe 'Lightblue::AST::Visitors::UnfoldVisitor' do
   include AstHelper
   use_ast_node_helpers

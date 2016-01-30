@@ -17,7 +17,7 @@ describe Lightblue::Expressions::Query do
   describe '.new' do
     context 'with an unbound_exp expression' do
       it 'generates a query expression' do
-        actual = Query.new(unbound_exp).send(:ast)
+        actual = Query.new(unbound_exp)
         expected = unbound_node
         expect(actual).to match_ast(expected)
       end
@@ -39,7 +39,7 @@ describe Lightblue::Expressions::Query do
         expected = new_node(:nary_logical_expression,
                             [new_node(:nary_logical_operator, [:$all]),
                              new_node(:query_array, [query_exp_node, query_exp_node])])
-        actual = Query.new.all([query, query]).send(:ast)
+        actual = Query.new.all([query, query])
         expect(actual).to match_ast(expected)
       end
     end
@@ -49,7 +49,7 @@ describe Lightblue::Expressions::Query do
         expected = new_node(:nary_logical_expression,
                             [new_node(:nary_logical_operator, [:$all]),
                              new_node(:query_array, [unbound_node, unbound_node])])
-        actual = Query.new.all([unbound_exp, unbound_exp]).send(:ast)
+        actual = Query.new.all([unbound_exp, unbound_exp])
         expect(actual).to match_ast(expected)
       end
     end
@@ -70,7 +70,7 @@ describe Lightblue::Expressions::Query do
         expected = new_node(:unary_logical_expression,
                             [new_node(:unary_logical_operator, [:$not]),
                              query_exp_node])
-        actual = Query.new.not(query).send(:ast)
+        actual = Query.new.not(query)
         expect(actual).to match_ast(expected)
       end
     end

@@ -96,7 +96,7 @@ module Lightblue
           ],
 
           array_contains_expression: [
-            { array: :array_field },
+            { array: :field },
             { contains: :array_contains_operator },
             { values: :value_list_array }
           ],

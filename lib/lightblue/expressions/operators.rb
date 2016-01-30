@@ -118,23 +118,23 @@ module Lightblue
         # @param [Symbol] token
         # @param [Expression] expression
         # @return [Expression]
-        def array_comparison_operator(token, expression)
+        def array_contains_operator(token, expression)
         end
-        private :array_comparison_operator
+        private :array_contains_operator
 
         # @macro op
         def any(expression)
-          array_comparison_operator(:$in, expression)
+          array_contains_operator(:$any, expression)
         end
 
         # @macro op
         def all(expression)
-          array_comparison_operator(:$not_in, expression)
+          array_contains_operator(:$all, expression)
         end
 
         # @macro op
         def none(expression)
-          array_comparison_operator(:$nin, expression)
+          array_contains_operator(:$none, expression)
         end
       end
     end

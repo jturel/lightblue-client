@@ -14,7 +14,7 @@ describe Lightblue::Expressions::Field do
       expected = new_node(:value_comparison_expression, [new_node(:field, [:bar]),
                                                          new_node(:binary_comparison_operator, [:$eq]),
                                                          value_node(10)])
-      actual = field_exp.eq(10).send(:ast)
+      actual = field_exp.eq(10)
       expect(actual).to match_ast(expected)
     end
 
@@ -22,7 +22,7 @@ describe Lightblue::Expressions::Field do
       expected = new_node(:value_comparison_expression, [new_node(:field, [:bar]),
                                                          new_node(:binary_comparison_operator, [:$eq]),
                                                          value_node(:foo)])
-      actual = field_exp.eq(:foo).send(:ast)
+      actual = field_exp.eq(:foo)
       expect(actual).to match_ast(expected)
     end
 
@@ -30,7 +30,7 @@ describe Lightblue::Expressions::Field do
       expected = new_node(:value_comparison_expression, [new_node(:field, [:bar]),
                                                          new_node(:binary_comparison_operator, [:$eq]),
                                                          value_node('foo')])
-      actual = field_exp.eq('foo').send(:ast)
+      actual = field_exp.eq('foo')
       expect(actual).to match_ast(expected)
     end
 
@@ -38,7 +38,7 @@ describe Lightblue::Expressions::Field do
       expected = new_node(:field_comparison_expression, [new_node(:field, [:bar]),
                                                          new_node(:binary_comparison_operator, [:$eq]),
                                                          new_node(:field, ['foo'])])
-      actual = field_exp.eq(Lightblue::Expressions::Field.new('foo')).send(:ast)
+      actual = field_exp.eq(Lightblue::Expressions::Field.new('foo'))
       expect(actual).to match_ast(expected)
     end
   end
@@ -51,7 +51,7 @@ describe Lightblue::Expressions::Field do
         expected = new_node(:nary_field_comparison_expression, [new_node(:field, [:bar]),
                                                                 new_node(:nary_comparison_operator, [:$nin]),
                                                                 new_node(:field, ['foo'])])
-        actual = field_exp.nin(Lightblue::Expressions::Field.new('foo')).send(:ast)
+        actual = field_exp.nin(Lightblue::Expressions::Field.new('foo'))
         expect(actual).to match_ast(expected)
       end
     end
@@ -61,7 +61,7 @@ describe Lightblue::Expressions::Field do
         expected = new_node(:nary_value_comparison_expression, [new_node(:field, [:bar]),
                                                                 new_node(:nary_comparison_operator, [:$nin]),
                                                                 new_node(:value_list_array, [%w('foo', 'batz')])])
-        actual = field_exp.nin(%w('foo', 'batz')).send(:ast)
+        actual = field_exp.nin(%w('foo', 'batz'))
         expect(actual).to match_ast(expected)
       end
     end
@@ -76,6 +76,18 @@ describe Lightblue::Expressions::Field do
 
     context 'when called with a symbol' do
       it('raises BadParamForOperator') { expect { field_exp.in(:s) }.to raise_error(bad_param_error) }
+    end
+  end
+  describe 'array match operators' do
+    context 'when called with an array' do
+      it 'generates an array_contains_expression' do
+        expected = new_node(:array_contains_expression, [new_node(:field, [:bar]),
+                                                         new_node(:array_contains_operator, [:$all]),
+                                                         new_node(:value_list_array, [%w('foo', 'batz')])])
+
+        actual = Field.new(:bar).all(%w('foo', 'batz'))
+        expect(actual).to match_ast(expected)
+      end
     end
   end
 end
