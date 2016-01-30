@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Lightblue::AST::Tokens
+  
+    &mdash; Documentation by YARD 0.8.7.6
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../../';
+  framesUrl = "../../frames.html#!Lightblue/AST/Tokens.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (T)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../Lightblue.html" title="Lightblue (module)">Lightblue</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../AST.html" title="Lightblue::AST (module)">AST</a></span></span>
+     &raquo; 
+    <span class="title">Tokens</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="../../method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="../../file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Module: Lightblue::AST::Tokens
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">lib/lightblue/ast/tokens.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="OPERATORS-constant" class="">OPERATORS =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='label'>unary_logical_operator:</span> <span class='lbracket'>[</span><span class='symbol'>:$not</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>nary_logical_operator:</span> <span class='lbracket'>[</span><span class='symbol'>:$and</span><span class='comma'>,</span> <span class='symbol'>:$or</span><span class='comma'>,</span> <span class='symbol'>:$all</span><span class='comma'>,</span> <span class='symbol'>:$any</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>nary_comparison_operator:</span> <span class='lbracket'>[</span><span class='symbol'>:$in</span><span class='comma'>,</span> <span class='symbol'>:$not_in</span><span class='comma'>,</span> <span class='symbol'>:$nin</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>binary_comparison_operator:</span> <span class='lbracket'>[</span><span class='symbol'>:=</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:!=</span><span class='comma'>,</span> <span class='symbol'>:&lt;</span><span class='comma'>,</span> <span class='symbol'>:&gt;</span><span class='comma'>,</span> <span class='symbol'>:&lt;=</span><span class='comma'>,</span> <span class='symbol'>:&gt;=</span><span class='comma'>,</span> <span class='symbol'>:$eq</span><span class='comma'>,</span> <span class='symbol'>:$neq</span><span class='comma'>,</span> <span class='symbol'>:$lt</span><span class='comma'>,</span> <span class='symbol'>:$gt</span><span class='comma'>,</span> <span class='symbol'>:$lte</span><span class='comma'>,</span> <span class='symbol'>:$gte</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>array_contains_operator:</span> <span class='lbracket'>[</span><span class='symbol'>:$any</span><span class='comma'>,</span> <span class='symbol'>:$all</span><span class='comma'>,</span> <span class='symbol'>:$none</span><span class='rbracket'>]</span>
+<span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="UNIONS-constant" class="">UNIONS =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='comment'># Queries
+</span>
+  <span class='label'>query_expression:</span> <span class='lbracket'>[</span><span class='symbol'>:logical_expression</span><span class='comma'>,</span> <span class='symbol'>:comparison_expression</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>logical_expression:</span> <span class='lbracket'>[</span><span class='symbol'>:unary_logical_expression</span><span class='comma'>,</span> <span class='symbol'>:nary_logical_expression</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>comparison_expression:</span> <span class='lbracket'>[</span><span class='symbol'>:relational_expression</span><span class='comma'>,</span> <span class='symbol'>:array_comparison_expression</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>relational_expression:</span> <span class='lbracket'>[</span><span class='symbol'>:binary_relational_expression</span><span class='comma'>,</span> <span class='symbol'>:nary_relational_expression</span><span class='comma'>,</span> <span class='symbol'>:regex_match_expression</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>binary_relational_expression:</span> <span class='lbracket'>[</span><span class='symbol'>:field_comparison_expression</span><span class='comma'>,</span> <span class='symbol'>:value_comparison_expression</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>nary_relational_expression:</span> <span class='lbracket'>[</span><span class='symbol'>:nary_field_relational_expression</span><span class='comma'>,</span> <span class='symbol'>:nary_value_relational_expression</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>array_comparison_expression:</span> <span class='lbracket'>[</span><span class='symbol'>:array_contains_expression</span><span class='comma'>,</span> <span class='symbol'>:array_match_expression</span><span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='comment'># Projections
+</span>
+  <span class='label'>projection:</span> <span class='lbracket'>[</span><span class='symbol'>:basic_projection</span><span class='comma'>,</span> <span class='symbol'>:basic_projection_array</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>basic_projection:</span> <span class='lbracket'>[</span><span class='symbol'>:field_projection</span><span class='comma'>,</span> <span class='symbol'>:array_projection</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>array_projection:</span> <span class='lbracket'>[</span><span class='symbol'>:array_match_projection</span><span class='comma'>,</span> <span class='symbol'>:array_range_projection</span><span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='comment'># Sort
+</span>
+  <span class='label'>sort:</span> <span class='lbracket'>[</span><span class='symbol'>:sort_key</span><span class='comma'>,</span> <span class='symbol'>:sort_key_array</span><span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='comment'># Not part of the spec
+</span>  <span class='label'>maybe_boolean:</span> <span class='lbracket'>[</span><span class='symbol'>:boolean</span><span class='comma'>,</span> <span class='symbol'>:empty</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>maybe_projection:</span> <span class='lbracket'>[</span><span class='symbol'>:project</span><span class='comma'>,</span> <span class='symbol'>:empty</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>maybe_sort:</span> <span class='lbracket'>[</span><span class='symbol'>:sort</span><span class='comma'>,</span> <span class='symbol'>:empty</span><span class='rbracket'>]</span>
+<span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="REVERSE_UNIONS-constant" class="">REVERSE_UNIONS =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>UNIONS</span><span class='period'>.</span><span class='id identifier rubyid_inject'>inject</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_acc'>acc</span><span class='comma'>,</span> <span class='lparen'>(</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span> <span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span><span class='op'>|</span>
+  <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_acc'>acc</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_k'>k</span> <span class='rbrace'>}</span>
+  <span class='id identifier rubyid_acc'>acc</span>
+<span class='kw'>end</span></pre></dd>
+      
+        <dt id="EXPRESSIONS-constant" class="">EXPRESSIONS =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+
+  <span class='comment'># Queries
+</span>
+  <span class='label'>unary_logical_expression:</span>  <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>op:</span> <span class='symbol'>:unary_logical_operator</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>expression:</span> <span class='symbol'>:query_expression</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='label'>nary_logical_expression:</span>   <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>op:</span> <span class='symbol'>:nary_logical_operator</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>expressions:</span> <span class='symbol'>:query_array</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='label'>array_match_expression:</span>    <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>array:</span> <span class='symbol'>:array_field</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>elemMatch:</span> <span class='symbol'>:query_expression</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='label'>nary_field_relational_expression:</span>  <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>field:</span> <span class='symbol'>:field</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>op:</span> <span class='symbol'>:nary_comparison_operator</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>rfield:</span> <span class='symbol'>:array_field</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='label'>nary_value_relational_expression:</span>  <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>field:</span> <span class='symbol'>:field</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>op:</span> <span class='symbol'>:nary_comparison_operator</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>values:</span> <span class='symbol'>:value_list_array</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='label'>field_comparison_expression:</span>  <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>field:</span> <span class='symbol'>:field</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>op:</span> <span class='symbol'>:binary_comparison_operator</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>rfield:</span> <span class='symbol'>:field</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='label'>value_comparison_expression:</span>  <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>field:</span> <span class='symbol'>:field</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>op:</span> <span class='symbol'>:binary_comparison_operator</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>rvalue:</span> <span class='symbol'>:value</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='label'>regex_match_expression:</span>  <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>field:</span>     <span class='symbol'>:field</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>regex:</span>     <span class='symbol'>:pattern</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>extended:</span>  <span class='symbol'>:maybe_boolean</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>multiline:</span> <span class='symbol'>:maybe_boolean</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>dotall:</span>    <span class='symbol'>:maybe_boolean</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>caseInsensitive:</span>  <span class='symbol'>:maybe_boolean</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='label'>array_contains_expression:</span> <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>array:</span> <span class='symbol'>:array_field</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>contains:</span> <span class='symbol'>:array_contains_operator</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>values:</span> <span class='symbol'>:value_list_array</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='comment'># Projections
+</span>
+  <span class='label'>field_projection:</span> <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>field:</span> <span class='symbol'>:pattern</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>include:</span> <span class='symbol'>:maybe_boolean</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>recursive:</span> <span class='symbol'>:maybe_boolean</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='label'>array_match_projection:</span> <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>field:</span> <span class='symbol'>:pattern</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>include:</span> <span class='symbol'>:boolean</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>match:</span> <span class='symbol'>:query_expression</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>project:</span> <span class='symbol'>:maybe_projection</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>sort:</span> <span class='symbol'>:maybe_sort</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span><span class='comma'>,</span>
+
+  <span class='label'>array_range_projection:</span> <span class='lbracket'>[</span>
+    <span class='lbrace'>{</span> <span class='label'>field:</span> <span class='symbol'>:pattern</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>include:</span> <span class='symbol'>:maybe_boolean</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>range:</span> <span class='symbol'>:range</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>project:</span> <span class='symbol'>:maybe_projection</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>sort:</span> <span class='symbol'>:maybe_sort</span> <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span>
+
+<span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="ATOMS-constant" class="">ATOMS =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbracket'>[</span>
+  <span class='symbol'>:value_list_array</span><span class='comma'>,</span>
+  <span class='symbol'>:array</span><span class='comma'>,</span>
+  <span class='symbol'>:field</span><span class='comma'>,</span>
+  <span class='symbol'>:value</span><span class='comma'>,</span>
+  <span class='symbol'>:boolean</span><span class='comma'>,</span>
+  <span class='symbol'>:pattern</span><span class='comma'>,</span>
+  <span class='symbol'>:array_field</span><span class='comma'>,</span>
+  <span class='symbol'>:value</span><span class='comma'>,</span>
+  <span class='symbol'>:empty</span>
+<span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="TERMINALS-constant" class="">TERMINALS =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>ATOMS</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span><span class='lparen'>(</span><span class='const'>OPERATORS</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='rparen'>)</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+
+
+</div>
+
+    <div id="footer">
+  Generated on Fri Jan 29 22:56:42 2016 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.6 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>
