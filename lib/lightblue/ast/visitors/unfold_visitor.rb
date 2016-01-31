@@ -3,7 +3,6 @@ module Lightblue
     module Visitors
       # This processor takes nodes or raw values passed into an expression node and expands them (so that the validation
       # visitor can process them.
-
       class UnfoldVisitor < AST::Visitor
         def on_union(node)
           node.updated(nil, process_all(node))

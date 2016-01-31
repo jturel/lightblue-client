@@ -93,6 +93,10 @@ module AstHelper
         s(:maybe_boolean, s(:boolean, true)),
         s(:maybe_boolean, s(:empty, nil)))
     end
+    let(:empty) { s(:empty, nil) }
+    let(:empty_bool) { s(:maybe_boolean, empty) }
+    let(:empty_projection) { s(:maybe_projection, empty) }
+    let(:empty_sort) { s(:maybe_sort, empty) }
 
     let(:unary_logical_exp_node) do
       s(:unary_logical_expression,

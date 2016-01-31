@@ -4,6 +4,7 @@ require 'lightblue/ast/tokens'
 require 'lightblue/ast/visitor'
 require 'lightblue/ast/visitors/unfold_visitor'
 require 'lightblue/ast/visitors/query_bind_visitor'
+require 'lightblue/ast/visitors/projection_bind_visitor'
 require 'lightblue/ast/visitors/hash_visitor'
 require 'lightblue/ast/visitors/validation_visitor'
 module Lightblue
