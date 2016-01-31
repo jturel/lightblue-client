@@ -22,12 +22,12 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'diffy', '~> 3.1.0'
   spec.add_development_dependency 'redcarpet'
   spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'rspec-core'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'guard'
   spec.add_development_dependency 'guard-yard'
   spec.add_development_dependency 'guard-rspec'
-  spec.add_development_dependency 'launchy'
   spec.add_development_dependency 'guard-rubocop'
 end

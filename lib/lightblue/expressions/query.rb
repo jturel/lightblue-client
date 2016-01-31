@@ -7,7 +7,8 @@ module Lightblue
       # @param [AST::Node, Expressions::Unbound, nil] expression
       def initialize(expression = nil)
         ast = case expression
-              when Expression then expression.ast
+              when Expressions::Query then expression.ast
+              when Expressions::Unbound then expression.bind(:query)
               when AST::Node then expression
               when nil then new_node(:query_expression, [])
               end
@@ -23,9 +24,17 @@ module Lightblue
         valid = expressions.is_a?(Array) && expressions.all? { |exp| exp.is_a?(Expression) }
         fail Errors::BadParamForOperator.new(token, expressions) unless valid
 
+        expressions = expressions.map do |exp|
+          case exp
+          when Expressions::Query then exp.ast
+          when Expressions::Unbound then exp.bind(:query)
+          when AST::Node then expression
+          end
+        end
+
         klass.new new_node(:nary_logical_expression,
                            [new_node(:nary_logical_operator, [token]),
-                            new_node(:query_array, expressions.map { |e| Lightblue::AST.unfold e.ast })])
+                            new_node(:query_array, expressions)])
       end
 
       # @param [Symbol] token

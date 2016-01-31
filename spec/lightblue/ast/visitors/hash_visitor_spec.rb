@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ast_helper'
 
-describe 'Visitor' do
+describe 'Visitor', skip: true do
   extend AstHelper
   use_ast_node_helpers
   let(:query1) do

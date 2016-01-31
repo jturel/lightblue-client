@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe 'Lightblue::AST::Visitors::UnfoldVisitor' do
+describe 'Lightblue::AST::Visitors::UnfoldVisitor', skip: true do
   include AstHelper
   use_ast_node_helpers
 

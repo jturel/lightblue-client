@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Lightblue::Client do
+describe Lightblue::Client, skip: true do
   subject do
     Lightblue::Client.new(
       data_uri: 'dburi', metadata_uri: 'mdburi', foo: 'bar')

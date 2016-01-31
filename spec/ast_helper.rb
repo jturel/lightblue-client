@@ -2,6 +2,7 @@ require 'spec_helper'
 require './lib/lightblue/ast'
 # rubocop:disable Metrics/AbcSize
 # rubocop:disable Metrics/MethodLength
+# rubocop:disable Metrics/ModuleLength
 module AstHelper
   include Lightblue::AST::Sexp
 
@@ -62,7 +63,17 @@ module AstHelper
         array_contains_op_node,
         values_node)
     end
-
+    let(:unbound_match_node) do
+      new_node(:unbound_match_expression,
+               [new_node(:field, [:bar]),
+                new_node(:value_comparison_expression,
+                         [new_node(:field, [:bar]),
+                          new_node(:binary_comparison_operator, [:$eq]),
+                          new_node(:value, [:foo])])])
+    end
+    let(:array_match_expression_node) do
+      new_node(:array_match_expression, unbound_match_node.children)
+    end
     let(:array_relational_exp_node) { s(:array_comparison_expression, array_contains_exp_node) }
 
     let(:nary_field_relational_exp_node) do

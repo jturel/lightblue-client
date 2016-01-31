@@ -19,7 +19,9 @@ module Lightblue
       # @option regex_options [Boolean] :extended
       def match(expression, regex_options = {})
         new_ast = case expression
-                  when Expression then new_node(:array_match_expression, [ast, expression.ast])
+                  when Expressions::Unbound then new_node(:unbound_match_expression,
+                                                          [ast, expression.bind(:query)])
+                  when Expression then new_node(:unbound_match_expression, [ast, expression.ast])
                   when String then build_regexp_node(expression, regex_options)
                   when Regexp then build_regexp_node(expression, regex_options)
                   else fail Errors::BadParamForOperator.new(token, expression)
@@ -34,8 +36,8 @@ module Lightblue
         parameters = AST::Tokens::EXPRESSIONS[:regex_match_expression][2..-1].map(&:keys).flatten
         options = parameters.map { |key| new_node(:maybe_boolean, [regex_options[key]]) }
 
-        new_node(:regex_match_expression, [ast,
-                                           new_node(:pattern, [regexp])].concat(options))
+        new_node(:unbound_regex_match_expression, [ast,
+                                                   new_node(:pattern, [regexp])].concat(options))
       end
 
       # @param [Symbol] token
@@ -44,8 +46,8 @@ module Lightblue
       def binary_comparison_operator(token, expression)
         type, expression =
           case expression
-          when Field then [:field_comparison_expression, expression.ast]
-          else [:value_comparison_expression, literal_to_node(expression)]
+          when Field then [:unbound_field_comparison_expression, expression.ast]
+          else [:unbound_value_comparison_expression, literal_to_node(expression)]
           end
         new_ast = new_node(type, [ast,
                                   new_node(:binary_comparison_operator, [token]),
@@ -59,8 +61,8 @@ module Lightblue
       def nary_comparison_operator(token, expression)
         type, expression =
           case expression
-          when Field then [:nary_field_comparison_expression, expression.ast]
-          when Array then [:nary_value_comparison_expression, literal_to_node(expression)]
+          when Field then [:unbound_nary_field_comparison_expression, expression.ast]
+          when Array then [:unbound_nary_value_comparison_expression, literal_to_node(expression)]
           else fail Errors::BadParamForOperator.new(token, expression)
           end
         new_ast = new_node(type, [ast,
@@ -75,7 +77,7 @@ module Lightblue
           when Array then literal_to_node(expression)
           else fail Errors::BadParamForOperator.new(token, expression)
           end
-        new_ast = new_node(:array_contains_expression,
+        new_ast = new_node(:unbound_array_contains_expression,
                            [ast,
                             new_node(:array_contains_operator, [token]),
                             expression])
