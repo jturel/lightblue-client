@@ -1,7 +1,7 @@
 
 require 'spec_helper'
 include AstHelper
-describe 'projections', skip: true do
+describe 'projections', pending: true do
   let(:entity) { Lightblue::Entity.new(:foo) }
   let(:field_projection) { Lightblue::Projection.new(:foo, entity) }
   let(:match_query) { Expression.new.apply_ast(query_exp_node) }

@@ -1,8 +1,7 @@
 require 'spec_helper'
 require 'ast_helper'
 include AstHelper
-describe 'queryin\'', skip: true do
-  pending
+describe 'queryin\'', pending: true do
   let(:entity) { Lightblue::Entity.new(:foo) }
   use_ast_node_helpers
 

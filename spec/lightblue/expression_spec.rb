@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'ast_helper'
 include AstHelper
 Expression = Lightblue::Expression
-describe 'Expressions', skip: true do
+describe 'Expressions', pending: true do
   let(:expression) { Lightblue::Expression }
   let(:entity) { Lightblue::Entity.new(:foo) }
   let(:bin_expr) { expression.new.field(Lightblue::AST::Node.new(:field, [:bar])).eq(:foo).resolve }
