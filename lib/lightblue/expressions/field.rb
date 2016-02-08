@@ -22,8 +22,7 @@ module Lightblue
                   when Expressions::Unbound then new_node(:unbound_match_expression,
                                                           [ast, expression.bind(:query)])
                   when Expression then new_node(:unbound_match_expression, [ast, expression.ast])
-                  when String then build_regexp_node(expression, regex_options)
-                  when Regexp then build_regexp_node(expression, regex_options)
+                  when String, Regexp then build_regexp_node(expression, regex_options)
                   else fail Errors::BadParamForOperator.new(token, expression)
                   end
         Unbound.new(new_ast)

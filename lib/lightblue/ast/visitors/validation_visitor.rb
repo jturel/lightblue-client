@@ -48,8 +48,7 @@ module Lightblue
         def on_maybe_boolean(node)
           child, = *node
           case child.type
-          when :boolean then process_all node
-          when :empty then process_all node
+          when :boolean, :empty then process_all node
           else
             fail InvalidSubexpression, "Expected Boolean | Empty, got #{child.type}"
           end
@@ -59,8 +58,7 @@ module Lightblue
         def on_maybe_projection(node)
           child, = *node
           case child.type
-          when :projection then process_all node
-          when :empty then process_all node
+          when :projection, :empty then process_all node
           else
             fail InvalidSubexpression, "Expected Projection | Empty, got #{child.type}"
           end
@@ -70,8 +68,7 @@ module Lightblue
         def on_maybe_sort(node)
           child, = *node
           case child.type
-          when :sort then process_all node
-          when :empty then process_all node
+          when :sort, :empty then process_all node
           else
             fail InvalidSubexpression, "Expected Sort | Empty, got #{child.type}"
           end
@@ -98,8 +95,7 @@ module Lightblue
         def on_boolean(node)
           value, = *node
           case value
-          when TrueClass
-          when FalseClass
+          when TrueClass, FalseClass
           else
             fail TerminalTypeMismatch, "Expected a TrueClass | FalseClass, got #{value}"
           end
@@ -116,9 +112,7 @@ module Lightblue
         def on_pattern(node)
           value, = *node
           case value
-          when Regexp
-          when String
-          when Symbol
+          when Regexp, String, Symbol
           else
             fail TerminalTypeMismatch, "Expected a Regexp | String, got #{value}"
           end
@@ -139,8 +133,7 @@ module Lightblue
         def on_field(node)
           child, = *node
           case child
-          when String
-          when Symbol
+          when String, Symbol
           else
             fail TerminalTypeMismatch, "Expected a field, got #{node.children}"
           end
@@ -150,8 +143,7 @@ module Lightblue
         def on_array_field(node)
           child, = *node
           case child
-          when String
-          when Symbol
+          when String, Symbol
           else
             fail TerminalTypeMismatch, "Expected a field, got #{node.children}"
           end
@@ -162,9 +154,7 @@ module Lightblue
           child, tail = *node
           fail TerminalTypeMismatch, "Expected a value, got a collection #{node.children}" if tail
           case child
-          when Array
-            fail TerminalTypeMismatch, "Expected a value, got a collection #{node.children}"
-          when Hash
+          when Array, Hash
             fail TerminalTypeMismatch, "Expected a value, got a collection #{node.children}"
           end
           nil

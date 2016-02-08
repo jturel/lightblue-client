@@ -44,9 +44,7 @@ module Lightblue
 
     def literal_to_node(literal)
       case literal
-      when Fixnum then new_node(:value, [literal])
-      when String then new_node(:value, [literal])
-      when Symbol then new_node(:value, [literal])
+      when Fixnum, String, Symbol then new_node(:value, [literal])
       when Array then new_node(:value_list_array, [literal])
       end
     end
