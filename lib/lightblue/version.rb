@@ -1,3 +1,3 @@
 module Lightblue
-  VERSION = '0.0.1.pre'.freeze
+  VERSION = '0.2.0'.freeze
 end

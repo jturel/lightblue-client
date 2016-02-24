@@ -52,6 +52,15 @@ module Lightblue
       self
     end
 
+    def match(expression)
+      empty = AST::Node.new(:maybe_boolean, [AST::Node.new(:empty, [nil])])
+      @ast = Lightblue::AST::Node.new(:regex_match_expression,
+                                      [@ast.first,
+                                       AST::Node.new(:pattern, [expression]),
+                                       empty, empty, empty, empty])
+      resolve
+      self
+    end
     def unfold_union(node)
       union = Lightblue::AST::Tokens::REVERSE_UNIONS[node.type]
       if union
