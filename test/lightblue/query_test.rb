@@ -13,6 +13,14 @@ describe 'queryin\'' do
     end
   end
 
+  describe 'match expressions' do
+    it 'should render the correct hash' do
+      expected = { field: :bar, regex: /.*/ }
+      find = entity.find { field[:bar].match(/.*/) }
+      assert_equal find.to_hash, expected
+    end
+  end
+
   describe 'binary expressions' do
     it 'should render the correct hash' do
       expected =

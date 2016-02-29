@@ -22,7 +22,7 @@ module Lightblue
     end
 
     def apply_ast(ast)
-      fail if @ast.any?
+      raise if @ast.any?
       @ast = Lightblue::AST::Visitors::UnfoldVisitor.new.process(ast)
       resolve
       self
@@ -49,6 +49,16 @@ module Lightblue
         @resolved = true
         break
       end
+      self
+    end
+
+    def match(expression)
+      empty = AST::Node.new(:maybe_boolean, [AST::Node.new(:empty, [nil])])
+      @ast = Lightblue::AST::Node.new(:regex_match_expression,
+                                      [@ast.first,
+                                       AST::Node.new(:pattern, [expression]),
+                                       empty, empty, empty, empty])
+      resolve
       self
     end
 
