@@ -23,7 +23,7 @@ module Lightblue
 
     def range(first, last)
       if @projection_type == :array_match_projection
-        fail IncompatibleProjectionParameters, 'Attempted to set range param  on a match projection'
+        raise IncompatibleProjectionParameters, 'Attempted to set range param  on a match projection'
       end
       @include = true if @include.nil?
 
@@ -34,7 +34,7 @@ module Lightblue
 
     def match(query = nil, &blk)
       if @projection_type == :array_match_projection
-        fail IncompatibleProjectionParameters, 'Attempted to set match param on a range projection'
+        raise IncompatibleProjectionParameters, 'Attempted to set match param on a range projection'
       end
 
       @include = true if @include.nil?
@@ -44,7 +44,7 @@ module Lightblue
     end
 
     def project(expr = nil, &blk)
-      fail 'Project can accept either an expression or a block' if expr && blk
+      raise 'Project can accept either an expression or a block' if expr && blk
 
       add_projection(ProjectionManager.new(@entity).project(&blk)) if blk
 

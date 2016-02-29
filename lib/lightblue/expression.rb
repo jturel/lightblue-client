@@ -22,7 +22,7 @@ module Lightblue
     end
 
     def apply_ast(ast)
-      fail if @ast.any?
+      raise if @ast.any?
       @ast = Lightblue::AST::Visitors::UnfoldVisitor.new.process(ast)
       resolve
       self
@@ -61,6 +61,7 @@ module Lightblue
       resolve
       self
     end
+
     def unfold_union(node)
       union = Lightblue::AST::Tokens::REVERSE_UNIONS[node.type]
       if union
