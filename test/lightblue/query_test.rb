@@ -148,5 +148,42 @@ describe 'queryin\'' do
       end
       assert_equal expected, query.to_hash
     end
+    describe 'array match projections' do
+      it 'should render the correct hash' do
+        expected = { entity: :foo,
+                     query: { field: :foo, op: :$eq, rvalue: 123 },
+                     projection:
+                     [
+                       { field: :_id, include: true },
+                       { field: :field1,
+                         include: true,
+                         match: { field: :field2, op: :$eq, rvalue: 'bar' },
+                         project: [
+                           { field: :field2 },
+                           { field: :field3 },
+                           { field: :field4 },
+                           { field: :field5 }
+                         ]
+                       }
+                     ]
+                   }
+        query = Lightblue::Query.new(entity)
+        query2 = Lightblue::Query.new(entity)
+        q =
+          query.find { field[:foo].eq(123) }
+               .project do
+                 field(:_id).include
+                 field(:field1)
+                   .match(query2.find { field[:field2].eq('bar') })
+                   .project do
+                     field(:field2)
+                     field(:field3)
+                     field(:field4)
+                     field(:field5)
+                   end
+               end
+        assert_equal q.to_hash, expected
+      end
+    end
   end
 end

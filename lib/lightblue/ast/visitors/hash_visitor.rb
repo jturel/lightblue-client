@@ -33,7 +33,11 @@ module Lightblue
         def on_expression_array(node)
           node.updated(nil, process_all(node))
         end
-        handle_with :on_expression_array, [:query_array, :basic_projection_array]
+        handle_with :on_expression_array, [:query_array]
+
+        def on_basic_projection_array(node)
+          node.updated(nil, [process_all(node).map(&:children).flatten])
+        end
 
         def on_nary_logical_expression(node)
           op, children = *process_all(node)
