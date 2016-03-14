@@ -52,14 +52,7 @@ module Lightblue
     private
 
     def projection_hash
-      if projection_ast
-        p = ast_to_hash(validate(unfold(projection_ast)))
-        if p.type == :basic_projection_array
-          p.children.map(&:children).flatten
-        else
-          p.children
-        end
-      end
+      ast_to_hash(validate(unfold(projection_ast))).children if projection_ast
     end
 
     def projection_ast
