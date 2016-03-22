@@ -187,15 +187,15 @@ describe 'queryin\'' do
     describe 'ranges' do
       it 'adds a range' do
         expected = { entity: :foo,
-                     query: { field: :foo, op: :$eq, rvalue: 123},
-                     projection: [ { field: :_id, include: true }],
+                     query: { field: :foo, op: :$eq, rvalue: 123 },
+                     projection: [{ field: :_id, include: true }],
                      from: 1,
                      to: 20 }
 
         query = Lightblue::Query.new(entity)
         query.find { field[:foo].eq(123) }
              .project { field(:_id).include }
-             .range(1,20)
+             .range(1, 20)
 
         assert_equal query.to_hash, expected
       end
