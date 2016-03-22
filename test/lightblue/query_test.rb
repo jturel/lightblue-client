@@ -194,8 +194,8 @@ describe 'queryin\'' do
 
         query = Lightblue::Query.new(entity)
         query = query.find { field[:foo].eq(123) }
-             .project { field(:_id).include }
-             .range(1, 20)
+                     .project { field(:_id).include }
+                     .range(1, 20)
 
         assert_equal query.to_hash, expected
       end
