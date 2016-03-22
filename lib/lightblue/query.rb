@@ -31,6 +31,11 @@ module Lightblue
       @find_manager.find(expr, &blk)
       self
     end
+
+    def range(head, tail)
+      @from = head
+      @to   = tail
+    end
     # @!endgroup
 
     # TODO
@@ -45,7 +50,9 @@ module Lightblue
       { entity: @entity.name,
         entityVersion: @entity.version,
         query: find_hash,
-        projection: [projection_hash].flatten
+        projection: [projection_hash].flatten,
+        from: @from,
+        to: @to
       }.delete_if { |_, v| v.nil? }
     end
 
