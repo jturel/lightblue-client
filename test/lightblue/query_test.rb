@@ -41,7 +41,6 @@ describe 'queryin\'' do
       assert_equal find.to_hash, expected
     end
   end
-
   describe 'nary relational expressions' do
     it 'value comparisons should generate the correct hash' do
       expected =
@@ -183,6 +182,22 @@ describe 'queryin\'' do
                    end
                end
         assert_equal q.to_hash, expected
+      end
+    end
+    describe 'ranges' do
+      it 'adds a range' do
+        expected = { entity: :foo,
+                     query: { field: :foo, op: :$eq, rvalue: 123 },
+                     projection: [{ field: :_id, include: true }],
+                     from: 1,
+                     to: 20 }
+
+        query = Lightblue::Query.new(entity)
+        query.find { field[:foo].eq(123) }
+             .project { field(:_id).include }
+             .range(1, 20)
+
+        assert_equal query.to_hash, expected
       end
     end
   end
