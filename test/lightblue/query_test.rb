@@ -193,7 +193,7 @@ describe 'queryin\'' do
                      to: 20 }
 
         query = Lightblue::Query.new(entity)
-        query.find { field[:foo].eq(123) }
+        query = query.find { field[:foo].eq(123) }
              .project { field(:_id).include }
              .range(1, 20)
 

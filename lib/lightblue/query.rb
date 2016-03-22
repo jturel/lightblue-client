@@ -35,6 +35,7 @@ module Lightblue
     def range(head, tail)
       @from = head
       @to   = tail
+      self
     end
     # @!endgroup
 
