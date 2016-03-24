@@ -62,6 +62,14 @@ module Lightblue
       self
     end
 
+    def elem_match(expression)
+      @ast = Lightblue::AST::Node.new(:array_match_expression,
+                                      [@ast.first.updated(:array_field),
+                                       expression.ast])
+      resolve
+      self
+    end
+
     def unfold_union(node)
       union = Lightblue::AST::Tokens::REVERSE_UNIONS[node.type]
       if union
