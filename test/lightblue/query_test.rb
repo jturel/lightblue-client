@@ -200,5 +200,20 @@ describe 'queryin\'' do
         assert_equal query.to_hash, expected
       end
     end
+    describe 'elem match expressions' do
+      it 'generates the correct value' do
+        expected = { entity: :foo,
+                     query: { array: :foo,
+                              elemMatch: { field: :foo, op: :$eq, rvalue: :bar }
+                            },
+                     projection: [{ field: '*' }]
+                   }
+
+        query = Lightblue::Query.new(entity)
+        query = query.find { field[:foo].elem_match(field[:foo].eq(:bar)) }
+                     .project { field('*') }
+        assert_equal query.to_hash, expected
+      end
+    end
   end
 end
